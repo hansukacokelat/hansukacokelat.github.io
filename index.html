@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Han Project - Cybersecurity</title>
+  <title>Han Project</title>
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
@@ -83,14 +83,6 @@
       color: var(--primary);
     }
 
-    ul {
-      padding-left: 1.5rem;
-    }
-
-    ul li {
-      margin-bottom: 0.6rem;
-    }
-
     footer {
       text-align: center;
       padding: 1.5rem;
@@ -99,97 +91,28 @@
       border-top: 1px solid var(--border);
       background: rgba(255, 255, 255, 0.8);
     }
-
-    .shield {
-      font-size: 1.2rem;
-      color: var(--primary);
-      margin-right: 0.5rem;
-    }
-
-    input, button {
-      padding: 10px;
-      margin-top: 10px;
-      width: 100%;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 1rem;
-    }
-
-    #result {
-      background-color: #e9f7e9;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-    }
-
-    #ipResult {
-      background-color: #e9f7e9;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-    }
   </style>
 </head>
 <body>
   <header>
     <h1>Han Project</h1>
-    <p>Solusi Keamanan Siber Interaktif — AES Encryption, Pemindaian IP, dan Banyak Lagi</p>
+    <p>Solusi Keamanan Digital untuk Masa Depan</p>
   </header>
 
   <main>
-    <!-- Fitur Enkripsi AES -->
     <section>
-      <h2><i class="fas fa-lock"></i> Enkripsi AES Quantum+</h2>
-      <p>Masukkan teks yang ingin dienkripsi dan kunci untuk AES Quantum+.</p>
-      <input type="text" id="inputText" placeholder="Teks untuk enkripsi..." />
-      <input type="text" id="encryptionKey" placeholder="Masukkan kunci..." />
-      <button onclick="encryptText()">Enkripsi AES</button>
-      <div id="result"></div>
+      <h2><i class="fas fa-shield-alt"></i> Selamat Datang di Han Project</h2>
+      <p>Proyek ini berfokus pada solusi keamanan siber modern yang memberikan perlindungan untuk masa depan. Kami mengembangkan teknologi yang dapat membantu individu dan organisasi dalam menjaga data dan sistem mereka agar tetap aman.</p>
     </section>
 
-    <!-- Pemindaian IP Address -->
     <section>
-      <h2><i class="fas fa-globe"></i> Pemindaian IP Address</h2>
-      <button onclick="scanIP()">Scan IP Address</button>
-      <div id="ipResult"></div>
+      <h2><i class="fas fa-info-circle"></i> Tentang Han Project</h2>
+      <p>Han Project adalah sebuah platform yang berfokus pada inovasi dalam keamanan siber. Kami terus mengembangkan teknologi untuk melawan ancaman digital yang terus berkembang, dengan tujuan menciptakan dunia yang lebih aman untuk semua.</p>
     </section>
-
-    <footer>
-      <p>© 2025 Han Project — Fokus pada Keamanan Digital Masa Kini</p>
-    </footer>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/build/crypto-js.js"></script>
-  <script>
-    // Fitur Enkripsi AES
-    function encryptText() {
-      const text = document.getElementById('inputText').value;
-      const key = document.getElementById('encryptionKey').value;
-      
-      if (!text || !key) {
-        alert('Teks dan kunci harus diisi!');
-        return;
-      }
-
-      const encrypted = CryptoJS.AES.encrypt(text, key).toString();
-      document.getElementById('result').innerText = `Hasil Enkripsi: ${encrypted}`;
-    }
-
-    // Pemindaian IP Address (menggunakan IP publik pengguna)
-    function scanIP() {
-      fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-          const ip = data.ip;
-          document.getElementById('ipResult').innerHTML = `
-            <p>IP Address Anda: ${ip}</p>
-            <p>IP ini aman dan terdeteksi dengan aman.</p>
-          `;
-        })
-        .catch(error => {
-          document.getElementById('ipResult').innerHTML = `<p>Gagal mendapatkan IP Address. Coba lagi!</p>`;
-        });
-    }
-  </script>
+  <footer>
+    <p>© 2025 Han Project — Fokus pada Keamanan Digital Masa Kini</p>
+  </footer>
 </body>
 </html>
