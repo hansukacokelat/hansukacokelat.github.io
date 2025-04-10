@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Han Project - Cybersecurity</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #f4fdf7;
+      --card-bg: #ffffffcc;
+      --text: #1a1a1a;
+      --primary: #28a745;
+      --accent: #14532d;
+      --border: #d0e6d4;
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      background-image: url('https://images.unsplash.com/photo-1593642532973-d31b6557fa68'); /* Background Image */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    header {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #444;
+    }
+
+    main {
+      max-width: 850px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    section {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(6px);
+      margin-bottom: 2rem;
+      padding: 1.8rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    section h2 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+    }
+
+    section h2 i {
+      margin-right: 10px;
+      color: var(--primary);
+    }
+
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    ul li {
+      margin-bottom: 0.6rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #555;
+      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .shield {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-right: 0.5rem;
+    }
+
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+    }
+
+    #result {
+      background-color: #e9f7e9;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    #ipResult {
+      background-color: #e9f7e9;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Han Project</h1>
+    <p>Solusi Keamanan Siber Interaktif — AES Encryption, Pemindaian IP, dan Banyak Lagi</p>
+  </header>
+
+  <main>
+    <!-- Fitur Enkripsi AES -->
+    <section>
+      <h2><i class="fas fa-lock"></i> Enkripsi AES Quantum+</h2>
+      <p>Masukkan teks yang ingin dienkripsi dan kunci untuk AES Quantum+.</p>
+      <input type="text" id="inputText" placeholder="Teks untuk enkripsi..." />
+      <input type="text" id="encryptionKey" placeholder="Masukkan kunci..." />
+      <button onclick="encryptText()">Enkripsi AES</button>
+      <div id="result"></div>
+    </section>
+
+    <!-- Pemindaian IP Address -->
+    <section>
+      <h2><i class="fas fa-globe"></i> Pemindaian IP Address</h2>
+      <button onclick="scanIP()">Scan IP Address</button>
+      <div id="ipResult"></div>
+    </section>
+
+    <footer>
+      <p>© 2025 Han Project — Fokus pada Keamanan Digital Masa Kini</p>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/build/crypto-js.js"></script>
+  <script>
+    // Fitur Enkripsi AES
+    function encryptText() {
+      const text = document.getElementById('inputText').value;
+      const key = document.getElementById('encryptionKey').value;
+      
+      if (!text || !key) {
+        alert('Teks dan kunci harus diisi!');
+        return;
+      }
+
+      const encrypted = CryptoJS.AES.encrypt(text, key).toString();
+      document.getElementById('result').innerText = `Hasil Enkripsi: ${encrypted}`;
+    }
+
+    // Pemindaian IP Address (menggunakan IP publik pengguna)
+    function scanIP() {
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const ip = data.ip;
+          document.getElementById('ipResult').innerHTML = `
+            <p>IP Address Anda: ${ip}</p>
+            <p>IP ini aman dan terdeteksi dengan aman.</p>
+          `;
+        })
+        .catch(error => {
+          document.getElementById('ipResult').innerHTML = `<p>Gagal mendapatkan IP Address. Coba lagi!</p>`;
+        });
+    }
+  </script>
+</body>
+</html>
