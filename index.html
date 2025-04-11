@@ -1,1 +1,109 @@
-Error 141428
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Chat Gratis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .chat-container {
+      max-width: 500px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .chat-header {
+      background: #007bff;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+    .chat-box {
+      padding: 15px;
+      height: 300px;
+      overflow-y: auto;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+    }
+    .chat-message {
+      margin: 10px 0;
+    }
+    .chat-message.user {
+      text-align: right;
+    }
+    .chat-message.bot {
+      text-align: left;
+      color: #444;
+    }
+    .chat-input {
+      display: flex;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+    .chat-input button {
+      padding: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .chat-input button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">Chat Live Gratis</div>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Ketik pesan..." />
+      <button onclick="sendMessage()">Kirim</button>
+    </div>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      // Tampilkan pesan pengguna
+      appendMessage('user', message);
+      input.value = '';
+
+      try {
+        // Kirim ke API (gunakan Monkedev sebagai contoh chatbot gratis)
+        const response = await fetch(`https://api.monkedev.com/fun/chat?msg=${encodeURIComponent(message)}&uid=demo`);
+        const data = await response.json();
+
+        // Tampilkan respon dari bot
+        appendMessage('bot', data.response || 'Bot tidak merespon.');
+      } catch (error) {
+        appendMessage('bot', 'Terjadi kesalahan saat menghubungi API.');
+        console.error(error);
+      }
+    }
+
+    function appendMessage(sender, text) {
+      const chatBox = document.getElementById('chatBox');
+      const messageEl = document.createElement('div');
+      messageEl.className = 'chat-message ' + sender;
+      messageEl.textContent = text;
+      chatBox.appendChild(messageEl);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
+
