@@ -5,60 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selamat Idul Adha 2025</title>
     <style>
+        /* Body Style */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
             text-align: center;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
+
+        /* Header Style */
         header {
             background-color: #2c6b2f;
             color: white;
-            padding: 20px;
-            font-size: 2rem;
+            padding: 40px;
+            font-size: 2.5rem;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid #ffd700;
+            transition: transform 0.3s ease;
         }
+
+        header:hover {
+            transform: scale(1.05);
+        }
+
+        /* Countdown Style */
         .countdown {
-            font-size: 2rem;
+            font-size: 2.5rem;
+            font-weight: bold;
             margin: 30px 0;
-            padding: 10px;
+            padding: 15px;
             background-color: #ffd700;
-            border-radius: 5px;
+            color: #2c6b2f;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
+
+        .countdown:hover {
+            background-color: #ffcc00;
+            transform: scale(1.05);
+        }
+
+        /* Content Style */
         .content {
             margin-top: 40px;
+            padding: 20px;
         }
+
+        /* Info Button */
         .btn-info {
             background-color: #ff6f61;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
         }
+
         .btn-info:hover {
             background-color: #d95d53;
+            transform: translateY(-3px);
         }
+
+        /* Info Text Style */
+        #infoText {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #555;
+            line-height: 1.6;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #infoText.show {
+            opacity: 1;
+        }
+
+        /* Image Style */
         img {
             max-width: 100%;
             height: auto;
-            margin-top: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            transition: transform 0.3s ease;
         }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <h1>Selamat Idul Adha 2025!</h1>
-        <p>Semoga berkah dan kebahagiaan menyertai kita semua.</p>
+        <h1>Selamat Hari Raya Idul Adha 2025!</h1>
+        <p>Semoga Berkah Idul Adha Membawa Kebaikan untuk Kita Semua</p>
     </header>
+
     <div class="countdown">
-        <p id="countdownTimer">Loading countdown...</p>
+        <p id="countdownTimer">Menghitung Detik Menuju Hari Penuh Berkah...</p>
     </div>
 
     <div class="content">
-        <button class="btn-info" onclick="showInfo()">Info tentang Idul Adha</button>
-        <p id="infoText" style="display:none; margin-top:20px;">Idul Adha adalah hari raya umat Islam yang merayakan kurban... (info lebih lanjut)</p>
-        <!-- Gambar Idul Adha dari URL yang kamu berikan -->
+        <button class="btn-info" onclick="showInfo()">Pelajari Lebih Lanjut</button>
+        <p id="infoText" class="hide">Idul Adha adalah momen yang penuh dengan makna, bukan hanya untuk umat Muslim, tapi juga untuk seluruh umat manusia. Mari kita peringati dengan penuh rasa syukur dan berbagi kepada sesama.</p>
         <img src="https://beritanasional.com/storage/2025/04/idul-adha-2025-jatuh-pada-tanggal-berapa-simak-tanggal-merahnya-05042025-212209.jpg" alt="Idul Adha Image">
     </div>
 
@@ -87,7 +142,7 @@
         // Show Info Function
         function showInfo() {
             const infoText = document.getElementById("infoText");
-            infoText.style.display = infoText.style.display === "none" ? "block" : "none";
+            infoText.classList.toggle("show");
         }
     </script>
 </body>
