@@ -10,7 +10,7 @@
       background: #0f0f0f;
       color: #00ff88;
     }
-    .login-box, .chat-container, .room-list {
+    .login-box {
       width: 400px;
       margin: 50px auto;
       padding: 20px;
@@ -32,39 +32,6 @@
       cursor: pointer;
       font-weight: bold;
     }
-    .user-info {
-      display: flex;
-      align-items: center;
-    }
-    .user-info img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
-    }
-    .messages {
-      height: 300px;
-      overflow-y: auto;
-      border-top: 1px solid #00ff88;
-      border-bottom: 1px solid #00ff88;
-      margin: 20px 0;
-      padding: 10px;
-    }
-    .send-box {
-      display: flex;
-    }
-    .send-box input {
-      flex: 1;
-      margin-right: 10px;
-    }
-    .room-list button {
-      margin-top: 10px;
-      background: #1e1e1e;
-    }
-    .status {
-      color: #00ff88;
-    }
   </style>
 </head>
 <body>
@@ -76,30 +43,6 @@
     <input type="password" id="password" placeholder="Password">
     <button onclick="signUp()">Daftar</button>
     <button onclick="login()">Masuk</button>
-  </div>
-
-  <!-- ROOM LIST -->
-  <div class="room-list" id="roomList" style="display: none;">
-    <h2>Ruang Obrolan</h2>
-    <button onclick="joinRoom('room_1')">Room 1</button>
-    <button onclick="joinRoom('room_2')">Room 2</button>
-  </div>
-
-  <!-- CHAT -->
-  <div class="chat-container" id="chatContainer" style="display:none;">
-    <div class="user-info">
-      <img id="profilePic" src="" alt="Profile">
-      <div>
-        <h3 id="userName">Nama</h3>
-        <p id="userDesc">Deskripsi</p>
-        <p id="userStatus" class="status">Status: Offline</p>
-      </div>
-    </div>
-    <div class="messages" id="messages"></div>
-    <div class="send-box">
-      <input type="text" id="msgInput" placeholder="Ketik pesan...">
-      <button onclick="sendMsg()">Kirim</button>
-    </div>
   </div>
 
   <!-- Firebase SDK -->
@@ -123,9 +66,6 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
-    let currentUser = {};
-    let currentRoom = '';
-
     // Fungsi untuk Sign Up (Registrasi)
     function signUp() {
       const username = document.getElementById('username').value.trim();
@@ -139,7 +79,7 @@
       auth.createUserWithEmailAndPassword(username + "@chat.com", password)
         .then((userCredential) => {
           alert("Akun berhasil dibuat!");
-          currentUser = userCredential.user;
+          const currentUser = userCredential.user;
 
           // Menyimpan nama pengguna di Realtime Database
           db.ref('users/' + currentUser.uid).set({
@@ -148,7 +88,8 @@
             lastSeen: Date.now()
           });
 
-          showRooms();
+          // Arahkan ke halaman chat setelah registrasi sukses
+          window.location.href = 'chat.html';  // Ganti dengan URL halaman chat
         })
         .catch((error) => {
           alert(error.message);
@@ -168,7 +109,7 @@
       auth.signInWithEmailAndPassword(username + "@chat.com", password)
         .then((userCredential) => {
           alert("Berhasil masuk!");
-          currentUser = userCredential.user;
+          const currentUser = userCredential.user;
 
           // Menyimpan status online pengguna di Realtime Database
           db.ref('users/' + currentUser.uid).update({
@@ -176,77 +117,12 @@
             lastSeen: Date.now()
           });
 
-          showRooms();
+          // Arahkan ke halaman chat setelah login sukses
+          window.location.href = 'chat.html';  // Ganti dengan URL halaman chat
         })
         .catch((error) => {
           alert(error.message);
         });
-    }
-
-    // Menampilkan halaman Rooms setelah login
-    function showRooms() {
-      document.getElementById('loginBox').style.display = 'none';
-      document.getElementById('roomList').style.display = 'block';
-    }
-
-    // Bergabung ke ruang obrolan tertentu
-    function joinRoom(roomName) {
-      currentRoom = roomName;
-      document.getElementById('roomList').style.display = 'none';
-      document.getElementById('chatContainer').style.display = 'block';
-      listenMessages(roomName);
-      updateUserStatus(true);
-    }
-
-    // Mengirim pesan
-    function sendMsg() {
-      const msgInput = document.getElementById('msgInput');
-      const msg = msgInput.value.trim();
-      if (msg === "") return;
-
-      const messagesRef = db.ref('chat_rooms/' + currentRoom + '/messages');
-      const newMsg = {
-        name: currentUser.displayName || currentUser.username,
-        text: msg,
-        photo: "https://via.placeholder.com/50x50?text=🙂",
-        time: Date.now()
-      };
-
-      messagesRef.push(newMsg);
-      msgInput.value = "";
-    }
-
-    // Mendengarkan pesan baru dari Firebase
-    function listenMessages(roomName) {
-      const messagesDiv = document.getElementById('messages');
-      messagesDiv.innerHTML = "";
-      db.ref('chat_rooms/' + roomName + '/messages').on("child_added", (snapshot) => {
-        const data = snapshot.val();
-        const msgEl = document.createElement('div');
-        msgEl.innerHTML = `<img src="${data.photo}"><b>${data.name}:</b> ${data.text}`;
-        messagesDiv.appendChild(msgEl);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      });
-    }
-
-    // Update status pengguna
-    function updateUserStatus(isOnline) {
-      const statusRef = db.ref('users/' + currentUser.uid);
-      statusRef.update({
-        online: isOnline,
-        lastSeen: Date.now()
-      });
-
-      document.getElementById('userStatus').innerText = isOnline ? "Status: Online" : "Status: Offline";
-    }
-
-    // Logout
-    function logout() {
-      auth.signOut().then(() => {
-        currentUser = {};
-        document.getElementById('roomList').style.display = 'none';
-        document.getElementById('loginBox').style.display = 'block';
-      });
     }
   </script>
 </body>
