@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Chat - Saudara Sejati</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #00ff88;
+    }
+    .chat-container {
+      width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 2px solid #00ff88;
+      border-radius: 10px;
+      background: #1a1a1a;
+    }
+    .messages {
+      height: 300px;
+      overflow-y: auto;
+      border-top: 1px solid #00ff88;
+      border-bottom: 1px solid #00ff88;
+      margin: 20px 0;
+      padding: 10px;
+    }
+    .send-box {
+      display: flex;
+    }
+    .send-box input {
+      flex: 1;
+      margin-right: 10px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .user-info img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="user-info">
+      <img id="profilePic" src="https://via.placeholder.com/50" alt="Profile">
+      <div>
+        <h3 id="userName">Nama Pengguna</h3>
+        <p id="userDesc">Deskripsi</p>
+      </div>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="send-box">
+      <input type="text" id="msgInput" placeholder="Ketik pesan...">
+      <button onclick="sendMsg()">Kirim</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js"></script>
+  <script>
+    // 🔧 Ganti dengan config Firebase kamu
+    const firebaseConfig = {
+      apiKey: "API_KEY_KAMU",
+      authDomain: "PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://PROJECT_ID.firebaseio.com",
+      projectId: "PROJECT_ID",
+      storageBucket: "PROJECT_ID.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    let currentUser = {};
+    let currentRoom = 'room_1';  // Bisa diganti dengan room yang sesuai
+
+    // Ambil data pengguna
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        currentUser = user;
+        db.ref('users/' + currentUser.uid).once('value', (snapshot) => {
+          const data = snapshot.val();
+          document.getElementById('userName').innerText = data.username;
+          document.getElementById('userDesc').innerText = data.username; // Ganti dengan data deskripsi jika ada
+          listenMessages();
+        });
+      } else {
+        window.location.href = 'index.html';  // Arahkan kembali ke halaman login jika tidak ada sesi pengguna
+      }
+    });
+
+    // Mendengarkan pesan baru dari Firebase
+    function listenMessages() {
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.innerHTML = "";
+      db.ref('chat_rooms/' + currentRoom + '/messages').on("child_added", (snapshot) => {
+        const data = snapshot.val();
+        const msgEl = document.createElement('div');
+        msgEl.innerHTML = `<b>${data.name}:</b> ${data.text}`;
+        messagesDiv.appendChild(msgEl);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+    }
+
+    // Mengirim pesan
+    function sendMsg() {
+      const msgInput = document.getElementById('msgInput');
+      const msg = msgInput.value.trim();
+      if (msg === "") return;
+
+      const messagesRef = db.ref('chat_rooms/' + currentRoom + '/messages');
+      const newMsg = {
+        name: currentUser.displayName || currentUser.username,
+        text: msg,
+        time: Date.now()
+      };
+
+      messagesRef.push(newMsg);
+      msgInput.value = "";
+    }
+  </script>
+</body>
+</html>
