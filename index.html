@@ -1,226 +1,81 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Selamat Hari Raya Idul Adha 2025! Mari rayakan dengan penuh makna dan berbagi berkah.">
-    <meta name="author" content="Idul Adha Team">
-    <meta name="keywords" content="Idul Adha, Selamat Idul Adha, 2025, Berkah, Sholat, Perayaan">
-    <title>Selamat Idul Adha 2025</title>
-
-    <!-- Favicon Icon -->
-    <link rel="icon" type="image/png" href="https://www.freepnglogos.com/uploads/hajj-png/hajj-16.png">
-
-    <style>
-        /* Body Style */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ffffff, #c8e6c9);
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            color: #333;
-            transition: background 0.3s ease;
-        }
-
-        /* Header Style */
-        header {
-            background: linear-gradient(135deg, #1b5e20, #388e3c);
-            color: white;
-            padding: 80px 20px;
-            font-size: 3.5rem;
-            font-weight: bold;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            border-radius: 20px;
-            transition: transform 0.3s ease, background 0.3s ease;
-        }
-
-        header.finished {
-            background: linear-gradient(135deg, #ff5722, #d32f2f);
-        }
-
-        /* Countdown Style */
-        .countdown {
-            font-size: 3rem;
-            font-weight: bold;
-            margin: 40px 0;
-            padding: 20px;
-            background: #ffca28;
-            color: #2e7d32;
-            border-radius: 15px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .countdown.finished {
-            background: #ff7043;
-            color: white;
-        }
-
-        /* Content Style */
-        .content {
-            margin-top: 60px;
-            padding: 40px;
-            text-align: center;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s ease;
-        }
-
-        .content.finished {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        /* Info Button */
-        .btn-info {
-            background-color: #e53935;
-            color: white;
-            padding: 18px 35px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .btn-info:hover {
-            background-color: #d32f2f;
-            transform: translateY(-5px);
-        }
-
-        /* Info Text Style */
-        #infoText {
-            margin-top: 25px;
-            font-size: 1.2rem;
-            color: #555;
-            line-height: 1.8;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        #infoText.show {
-            opacity: 1;
-        }
-
-        /* Image Style */
-        img {
-            max-width: 90%;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.15);
-            margin-top: 40px;
-            transition: transform 0.3s ease;
-        }
-
-        img:hover {
-            transform: scale(1.05);
-        }
-
-        /* Media Queries for Mobile Responsiveness */
-        @media (max-width: 768px) {
-            header {
-                font-size: 2.5rem;
-                padding: 30px;
-            }
-            .countdown {
-                font-size: 2rem;
-                padding: 15px;
-            }
-            .btn-info {
-                padding: 12px 25px;
-                font-size: 1.2rem;
-            }
-            img {
-                margin-top: 20px;
-                max-width: 95%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                font-size: 1.8rem;
-                padding: 20px;
-            }
-            .countdown {
-                font-size: 1.5rem;
-                padding: 10px;
-            }
-            .btn-info {
-                padding: 10px 20px;
-                font-size: 1rem;
-            }
-            img {
-                margin-top: 15px;
-                max-width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndCybersec-X Chatbot</title>
+  <style>
+    body { 
+      font-family: 'Courier New', monospace; 
+      background: #000; 
+      color: #00ffcc; 
+      padding: 20px;
+    }
+    .messages { 
+      max-height: 500px; 
+      overflow-y: auto; 
+      margin-bottom: 20px;
+    }
+    .user, .bot { 
+      margin: 5px; 
+      padding: 10px; 
+    }
+    .user { 
+      background: #444; 
+      color: white; 
+    }
+    .bot { 
+      background: #00ffcc; 
+      color: black; 
+    }
+    #input { 
+      padding: 10px; 
+      width: 80%; 
+      border: 1px solid #00ffcc; 
+      background: #111; 
+      color: #00ffcc; 
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Selamat Hari Raya Idul Adha 2025!</h1>
-        <p>Semoga Berkah Idul Adha Membawa Kebaikan untuk Kita Semua</p>
-    </header>
+  <div id="chatBox" class="messages"></div>
+  <input id="input" type="text" placeholder="Tanya apa saja...">
+  <button onclick="sendMessage()">Kirim</button>
 
-    <div class="countdown">
-        <p id="countdownTimer">Menghitung Detik Menuju Hari Penuh Berkah...</p>
-    </div>
+  <script>
+    async function sendMessage() {
+      const userMessage = document.getElementById("input").value;
+      if (!userMessage) return;
 
-    <div class="content">
-        <button class="btn-info" onclick="showInfo()" aria-expanded="false" aria-controls="infoText">Pelajari Lebih Lanjut</button>
-        <p id="infoText" class="hide">Idul Adha adalah momen yang penuh dengan makna, bukan hanya untuk umat Muslim, tapi juga untuk seluruh umat manusia. Mari kita peringati dengan penuh rasa syukur dan berbagi kepada sesama.</p>
+      // Menampilkan pesan pengguna
+      addMessage(userMessage, "user");
 
-        <!-- Gambar tambahan -->
-        <img src="https://www.aljazeera.com/wp-content/uploads/2023/06/2023-06-28T184902Z_749167228_RC2VAX9IR1U1_RTRMADP_3_OMAN-BAHRAIN-PRAYERS-ID-ADHA.jpg?fit=1000%2C563" alt="Sholat Idul Adha">
-        <img src="https://cdn.pixabay.com/photo/2020/08/02/09/33/idul-adha-5458401_960_720.jpg" alt="Perayaan Idul Adha">
-    </div>
+      // Mengirim permintaan ke DeepAI API
+      const response = await fetch('https://api.deepai.org/api/text-generator', {
+        method: 'POST',
+        headers: {
+          'Api-Key': 'YOUR_DEEPAI_API_KEY', // API Key dari DeepAI
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: userMessage,  // Mengirim teks yang dimasukkan pengguna
+        }),
+      });
 
-    <script>
-        // Countdown Timer
-        const countDownDate = new Date("Jul 28, 2025 00:00:00").getTime();
+      // Menampilkan hasil dari API
+      const data = await response.json();
+      addMessage(data.output, "bot"); // Menampilkan hasil respon AI ke bot
+    }
 
-        const countdownFunction = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = countDownDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("countdownTimer").innerHTML =
-                days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-            if (distance < 0) {
-                clearInterval(countdownFunction);
-                document.getElementById("countdownTimer").innerHTML = "Idul Adha Telah Tiba!";
-                
-                // Update theme and message when countdown ends
-                document.body.style.background = "#ffe082";
-                document.querySelector("header").classList.add("finished");
-                document.querySelector(".countdown").classList.add("finished");
-                document.querySelector(".content").classList.add("finished");
-                
-                // Show the message
-                document.getElementById("countdownTimer").innerHTML = "Selamat Idul Adha 2025!";
-            }
-        }, 1000);
-
-        // Show Info Function
-        function showInfo() {
-            const infoText = document.getElementById("infoText");
-            const button = document.querySelector(".btn-info");
-            infoText.classList.toggle("show");
-            const isExpanded = infoText.classList.contains("show");
-            button.setAttribute("aria-expanded", isExpanded);
-        }
-    </script>
+    // Fungsi untuk menambahkan pesan ke chat
+    function addMessage(message, sender) {
+      const chatBox = document.getElementById("chatBox");
+      const msgDiv = document.createElement("div");
+      msgDiv.className = sender;
+      msgDiv.textContent = message;
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;  // Scroll otomatis ke bawah
+    }
+  </script>
 </body>
 </html>
