@@ -2,128 +2,304 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Live Chat AI - Saudara Sejati</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latihan Perkalian Interaktif</title>
   <style>
+    :root {
+      --bg: #121212;
+      --text: #fff;
+      --primary: #00bcd4;
+      --correct: #2e7d32;
+      --wrong: #c62828;
+      --header: #263238;
+      --highlight: #37474f;
+      --input-border: #444;
+    }
+
     body {
-      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
       font-family: 'Segoe UI', sans-serif;
-      background: #0f0f0f;
-      color: #00ff88;
-    }
-    .login-box {
-      width: 400px;
-      margin: 50px auto;
+      margin: 0;
       padding: 20px;
-      border: 2px solid #00ff88;
-      border-radius: 10px;
-      background: #1a1a1a;
+      text-align: center;
     }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      outline: none;
-      border-radius: 5px;
+
+    h1 {
+      color: var(--primary);
+      margin-bottom: 10px;
     }
+
+    .controls, .quiz-controls {
+      margin-bottom: 20px;
+    }
+
     button {
-      background: #00ff88;
-      color: black;
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #0097a7;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+
+    th, td {
+      border: 1px solid #555;
+      width: 50px;
+      height: 50px;
+      text-align: center;
+    }
+
+    th {
+      background-color: var(--header);
+      color: var(--primary);
+    }
+
+    input {
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      background: transparent;
+      color: white;
+      border: 1px solid var(--input-border);
+      text-align: center;
+    }
+
+    input.correct {
+      background-color: var(--correct);
+    }
+
+    input.wrong {
+      background-color: var(--wrong);
+    }
+
+    .stats {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .leaderboard {
+      margin-top: 30px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN -->
-  <div class="login-box" id="loginBox">
-    <h2>Masuk ke Chat</h2>
-    <input type="text" id="username" placeholder="Nama Pengguna">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="signUp()">Daftar</button>
-    <button onclick="login()">Masuk</button>
+  <h1>Latihan Perkalian Interaktif</h1>
+
+  <div class="controls">
+    <input type="text" id="username" placeholder="Masukkan Nama Pengguna" />
+    <button onclick="setMode('free')">Mode Bebas</button>
+    <button onclick="setMode('timer')">Mode Timer</button>
+    <button onclick="setMode('hardcore')">Mode Hardcore</button>
+    <button onclick="setMode('quiz')">Mode Kuis</button>
+    <button onclick="resetGame()">Reset</button>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js"></script>
+  <div class="stats" id="stats"></div>
+  <table id="table"></table>
+
+  <div class="leaderboard" id="leaderboard">
+    <h3>Leaderboard</h3>
+    <ul id="leaderboardList"></ul>
+  </div>
+
   <script>
-    // 🔧 Ganti dengan config Firebase kamu
-    const firebaseConfig = {
-      apiKey: "API_KEY_KAMU",
-      authDomain: "PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://PROJECT_ID.firebaseio.com",
-      projectId: "PROJECT_ID",
-      storageBucket: "PROJECT_ID.appspot.com",
-      messagingSenderId: "SENDER_ID",
-      appId: "APP_ID"
-    };
+    const max = 10;
+    const table = document.getElementById('table');
+    const stats = document.getElementById('stats');
+    const leaderboardList = document.getElementById('leaderboardList');
+    let mode = 'free';
+    let timer = null;
+    let timeLeft = 0;
+    let correct = 0;
+    let wrong = 0;
+    let username = '';
+    let currentQuestion = 0;
+    let questions = [];
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 
-    // Fungsi untuk Sign Up (Registrasi)
-    function signUp() {
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
-
-      if (!username || !password) {
-        alert("Nama Pengguna dan Password harus diisi!");
-        return;
+    function createTable() {
+      table.innerHTML = '';
+      const headerRow = document.createElement('tr');
+      const empty = document.createElement('th');
+      headerRow.appendChild(empty);
+      for (let i = 0; i <= max; i++) {
+        const th = document.createElement('th');
+        th.textContent = i;
+        headerRow.appendChild(th);
       }
+      table.appendChild(headerRow);
 
-      auth.createUserWithEmailAndPassword(username + "@chat.com", password)
-        .then((userCredential) => {
-          alert("Akun berhasil dibuat!");
-          const currentUser = userCredential.user;
+      for (let i = 0; i <= max; i++) {
+        const row = document.createElement('tr');
+        const th = document.createElement('th');
+        th.textContent = i;
+        row.appendChild(th);
 
-          // Menyimpan nama pengguna di Realtime Database
-          db.ref('users/' + currentUser.uid).set({
-            username: username,
-            online: true,
-            lastSeen: Date.now()
-          });
+        for (let j = 0; j <= max; j++) {
+          const td = document.createElement('td');
+          const input = document.createElement('input');
+          input.dataset.correct = i * j;
+          input.disabled = false;
 
-          // Arahkan ke halaman chat setelah registrasi sukses
-          window.location.href = 'chat.html';  // Ganti dengan URL halaman chat
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+          input.addEventListener('input', () => handleInput(input));
+          td.appendChild(input);
+          row.appendChild(td);
+        }
+        table.appendChild(row);
+      }
     }
 
-    // Fungsi untuk Login
-    function login() {
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
+    function generateQuestions() {
+      questions = [];
+      for (let i = 0; i <= max; i++) {
+        for (let j = 0; j <= max; j++) {
+          questions.push({ question: `${i} x ${j}`, answer: i * j });
+        }
+      }
+      questions = shuffleArray(questions);
+    }
 
-      if (!username || !password) {
-        alert("Nama Pengguna dan Password harus diisi!");
-        return;
+    function shuffleArray(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function setMode(newMode) {
+      resetGame();
+      mode = newMode;
+      username = document.getElementById('username').value || 'Anonym';
+      if (mode === 'timer') {
+        timeLeft = 60;
+        startCountdown();
+      } else if (mode === 'hardcore') {
+        timeLeft = 30;
+        startCountdown();
+      } else if (mode === 'quiz') {
+        generateQuestions();
+        loadNextQuestion();
+      }
+      updateStats();
+    }
+
+    function startCountdown() {
+      updateStats();
+      timer = setInterval(() => {
+        timeLeft--;
+        updateStats();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function handleInput(input) {
+      const answer = parseInt(input.value);
+      const correctAnswer = parseInt(input.dataset.correct);
+      const isCorrect = answer === correctAnswer;
+
+      if (isCorrect) {
+        input.classList.add('correct');
+        input.classList.remove('wrong');
+        input.disabled = true;
+        correct++;
+      } else {
+        input.classList.remove('correct');
+        input.classList.add('wrong');
+        wrong++;
+        if (mode === 'hardcore') {
+          input.disabled = true;
+        }
       }
 
-      auth.signInWithEmailAndPassword(username + "@chat.com", password)
-        .then((userCredential) => {
-          alert("Berhasil masuk!");
-          const currentUser = userCredential.user;
-
-          // Menyimpan status online pengguna di Realtime Database
-          db.ref('users/' + currentUser.uid).update({
-            online: true,
-            lastSeen: Date.now()
-          });
-
-          // Arahkan ke halaman chat setelah login sukses
-          window.location.href = 'chat.html';  // Ganti dengan URL halaman chat
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+      updateStats();
     }
+
+    function updateStats() {
+      stats.innerHTML = `
+        Mode: <strong>${mode.toUpperCase()}</strong> |
+        Waktu: <strong>${timeLeft > 0 ? timeLeft + ' detik' : '-'}</strong> |
+        Benar: <strong>${correct}</strong> |
+        Salah: <strong>${wrong}</strong>
+      `;
+    }
+
+    function endGame() {
+      const total = correct + wrong;
+      const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+      stats.innerHTML += `<br><strong>Permainan Selesai!</strong> Akurasi: ${accuracy}%`;
+
+      // Save to leaderboard
+      leaderboard.push({ username, mode, correct, wrong, accuracy });
+      leaderboard.sort((a, b) => b.accuracy - a.accuracy);
+      if (leaderboard.length > 5) leaderboard.pop();  // Top 5 leaderboard
+      localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+      displayLeaderboard();
+
+      document.querySelectorAll('input').forEach(input => input.disabled = true);
+    }
+
+    function displayLeaderboard() {
+      leaderboardList.innerHTML = '';
+      leaderboard.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = `${entry.username} | ${entry.mode} | Benar: ${entry.correct} | Salah: ${entry.wrong} | Akurasi: ${entry.accuracy}%`;
+        leaderboardList.appendChild(li);
+      });
+    }
+
+    function loadNextQuestion() {
+      if (currentQuestion < questions.length) {
+        const question = questions[currentQuestion];
+        stats.innerHTML = `
+          Soal: <strong>${question.question}</strong>
+        `;
+        const input = document.createElement('input');
+        input.setAttribute('type', 'number');
+        input.addEventListener('input', () => {
+          if (parseInt(input.value) === question.answer) {
+            correct++;
+            currentQuestion++;
+            loadNextQuestion();
+          }
+        });
+        stats.appendChild(input);
+      } else {
+        endGame();
+      }
+    }
+
+    function resetGame() {
+      clearInterval(timer);
+      correct = 0;
+      wrong = 0;
+      timeLeft = 0;
+      currentQuestion = 0;
+      createTable();
+      updateStats();
+    }
+
+    // Initial leaderboard load
+    displayLeaderboard();
+
+    // Create default table
+    createTable();
+    updateStats();
   </script>
 </body>
 </html>
