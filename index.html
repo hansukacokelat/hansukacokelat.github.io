@@ -99,40 +99,85 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script>
     function calculate() {
-      const input = document.getElementById('calcInput').value;
-      try {
-        const result = eval(input);
-        document.getElementById('calcOutput').innerText = result;
-      } catch (e) {
-        document.getElementById('calcOutput').innerText = 'Input tidak valid';
-      }
+        const input = document.getElementById('calcInput').value;
+        try {
+            if (/^[0-9+\-*/().\s]+$/.test(input)) {
+                const result = eval(input);
+                document.getElementById('calcOutput').innerText = result;
+            } else {
+                throw new Error('Invalid input');
+            }
+        } catch (e) {
+            document.getElementById('calcOutput').innerText = 'Input tidak valid';
+        }
     }
 
-    // QR Code Generator
     function generateQRCode() {
-      const text = document.getElementById('qrInput').value;
-      const qrContainer = document.getElementById('qrContainer');
-      qrContainer.innerHTML = '';
-      new QRCode(qrContainer, text);
+        const text = document.getElementById('qrInput').value;
+        const qrContainer = document.getElementById('qrContainer');
+        qrContainer.innerHTML = '';
+        if (text.trim() !== '') {
+            new QRCode(qrContainer, text);
+        } else {
+            qrContainer.innerText = 'Input tidak valid untuk QR Code';
+        }
     }
 
-    function generateRandomQuote() {
-      const quotes = [
-        "The best way to predict the future is to create it.",
-        "Success is not final, failure is not fatal: It is the courage to continue that counts.",
-        "It does not matter how slowly you go as long as you do not stop.",
-        "In the middle of difficulty lies opportunity."
-      ];
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('quoteBox').innerText = randomQuote;
+    function calculateBMI() {
+        const weight = parseFloat(document.getElementById('weight').value);
+        const height = parseFloat(document.getElementById('height').value) / 100;
+        if (weight > 0 && height > 0) {
+            const bmi = (weight / (height * height)).toFixed(2);
+            document.getElementById('bmiResult').innerText = bmi;
+        } else {
+            document.getElementById('bmiResult').innerText = 'Masukkan berat dan tinggi yang valid';
+        }
     }
 
-    function calculateBMI() { /* Function content */ }
-    function calculateAge() { /* Function content */ }
-    function generateRandomNumber() { /* Function content */ }
-    function convertTemperature() { /* Function content */ }
-    function calculateDateDifference() { /* Function content */ }
-    function startCountdown() { /* Function content */ }
+    function calculateAge() {
+        const birthDate = new Date(document.getElementById('birthDate').value);
+        const today = new Date();
+        if (birthDate <= today) {
+            const age = today.getFullYear() - birthDate.getFullYear();
+            document.getElementById('ageResult').innerText = age;
+        } else {
+            document.getElementById('ageResult').innerText = 'Tanggal lahir tidak valid';
+        }
+    }
+
+    function generateRandomNumber() {
+        const min = parseInt(document.getElementById('minNum').value);
+        const max = parseInt(document.getElementById('maxNum').value);
+        if (min < max) {
+            const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            document.getElementById('randomNum').innerText = randomNum;
+        } else {
+            document.getElementById('randomNum').innerText = 'Min harus lebih kecil dari Max';
+        }
+    }
+
+    function startCountdown() {
+        const timeInput = document.getElementById('countdownInput').value;
+        if (timeInput) {
+            const targetTime = new Date();
+            const [hours, minutes] = timeInput.split(":").map(Number);
+            targetTime.setHours(hours, minutes, 0);
+            const interval = setInterval(function () {
+                const currentTime = new Date();
+                const timeDiff = targetTime - currentTime;
+                if (timeDiff <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdownOutput').innerText = "Waktu Habis!";
+                } else {
+                    const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
+                    const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    document.getElementById('countdownOutput').innerText = `${hoursLeft} jam ${minutesLeft} menit`;
+                }
+            }, 1000);
+        } else {
+            document.getElementById('countdownOutput').innerText = "Input waktu tidak valid";
+        }
+    }
   </script>
 </body>
 </html>
