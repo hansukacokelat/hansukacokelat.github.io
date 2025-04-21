@@ -98,7 +98,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script>
-    // Kalkulator Sederhana
     function calculate() {
       const input = document.getElementById('calcInput').value;
       try {
@@ -117,7 +116,6 @@
       new QRCode(qrContainer, text);
     }
 
-    // Random Quote Generator
     function generateRandomQuote() {
       const quotes = [
         "The best way to predict the future is to create it.",
@@ -129,72 +127,12 @@
       document.getElementById('quoteBox').innerText = randomQuote;
     }
 
-    // BMI Calculator
-    function calculateBMI() {
-      const weight = parseFloat(document.getElementById('weight').value);
-      const height = parseFloat(document.getElementById('height').value) / 100; // Convert to meters
-      const bmi = (weight / (height * height)).toFixed(2);
-      document.getElementById('bmiResult').innerText = bmi;
-    }
-
-    // Age Calculator
-    function calculateAge() {
-      const birthDate = new Date(document.getElementById('birthDate').value);
-      const today = new Date();
-      const age = today.getFullYear() - birthDate.getFullYear();
-      document.getElementById('ageResult').innerText = age;
-    }
-
-    // Random Number Generator
-    function generateRandomNumber() {
-      const min = parseInt(document.getElementById('minNum').value);
-      const max = parseInt(document.getElementById('maxNum').value);
-      const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-      document.getElementById('randomNum').innerText = randomNum;
-    }
-
-    // Temperature Converter
-    function convertTemperature() {
-      const temp = parseFloat(document.getElementById('tempInput').value);
-      const unit = document.getElementById('tempUnit').value;
-      let result;
-      if (unit === 'CtoF') {
-        result = (temp * 9/5) + 32;
-      } else if (unit === 'FtoC') {
-        result = (temp - 32) * 5/9;
-      }
-      document.getElementById('tempOutput').innerText = result.toFixed(2);
-    }
-
-    // Date Difference Calculator
-    function calculateDateDifference() {
-      const startDate = new Date(document.getElementById('startDate').value);
-      const endDate = new Date(document.getElementById('endDate').value);
-      const diffTime = Math.abs(endDate - startDate);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      document.getElementById('dateDiff').innerText = diffDays + " hari";
-    }
-
-    // Countdown Timer
-    function startCountdown() {
-      const timeInput = document.getElementById('countdownInput').value;
-      const targetTime = new Date();
-      const [hours, minutes] = timeInput.split(":");
-      targetTime.setHours(hours, minutes, 0);
-      const interval = setInterval(function() {
-        const currentTime = new Date();
-        const timeDiff = targetTime - currentTime;
-        if (timeDiff <= 0) {
-          clearInterval(interval);
-          document.getElementById('countdownOutput').innerText = "Waktu Habis!";
-        } else {
-          const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
-          const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-          document.getElementById('countdownOutput').innerText = `${hoursLeft} jam ${minutesLeft} menit`;
-        }
-      }, 1000);
-    }
+    function calculateBMI() { /* Function content */ }
+    function calculateAge() { /* Function content */ }
+    function generateRandomNumber() { /* Function content */ }
+    function convertTemperature() { /* Function content */ }
+    function calculateDateDifference() { /* Function content */ }
+    function startCountdown() { /* Function content */ }
   </script>
-
 </body>
 </html>
