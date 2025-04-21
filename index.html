@@ -3,177 +3,196 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Han Site - Cybersecurity, Informatika, QR dan Lainnya</title>
+  <title>Han Site - GABUT</title>
   <style>
-    /* Reset CSS */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Basic Styling */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      padding: 20px;
-    }
-
-    header {
-      background-color: #333;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      border-radius: 8px;
-    }
-
-    h1 {
-      font-size: 2.5em;
-    }
-
-    section {
-      margin: 30px 0;
-    }
-
-    h2 {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      background-color: #3498db;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 50px;
-      font-size: 0.9em;
-      color: #777;
-    }
-
-    .output-box {
-      background-color: #fff;
-      padding: 15px;
-      border-radius: 5px;
-      margin-top: 15px;
-    }
-
-    .qr-container {
-      margin-top: 20px;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
+    header { background: #3498db; color: white; padding: 10px; text-align: center; }
+    section { margin-top: 20px; }
+    input, button { padding: 10px; width: 100%; margin: 5px 0; }
+    .output-box { background: white; padding: 10px; border-radius: 5px; }
+    button:hover { background-color: #2980b9; }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
 
   <header>
-    <h1>Han Site - Cybersecurity, Informatika, QR dan Fitur Lainnya</h1>
+    <h1>GABUT PROJECT'S</h1>
   </header>
 
+  <!-- Kalkulator Sederhana -->
   <section>
-    <h2>1. Cybersecurity - Password Strength Checker</h2>
-    <input type="password" id="password" placeholder="Masukkan password" oninput="checkPasswordStrength()">
-    <div id="passwordStrength" class="output-box"></div>
+    <h2>Kalkulator Sederhana</h2>
+    <input type="text" id="calcInput" placeholder="Masukkan perhitungan (contoh: 5+3)" oninput="calculate()">
+    <p>Hasil: <span id="calcOutput" class="output-box"></span></p>
   </section>
 
+  <!-- QR Code Generator -->
   <section>
-    <h2>2. Informatika - Konversi Desimal ke Biner</h2>
-    <input type="number" id="decimalInput" placeholder="Masukkan angka desimal" oninput="convertDecimalToBinary()">
-    <p>Hasil Biner: <span id="binaryOutput" class="output-box"></span></p>
+    <h2>QR Code Generator</h2>
+    <input type="text" id="qrInput" placeholder="Masukkan URL atau teks untuk QR Code">
+    <button onclick="generateQRCode()">Buat QR Code</button>
+    <div id="qrContainer"></div>
   </section>
 
+  <!-- Random Quote Generator -->
   <section>
-    <h2>3. QR Code Generator</h2>
-    <input type="text" id="qrInput" placeholder="Masukkan teks untuk QR Code" oninput="generateQRCode()">
-    <div id="qrCode" class="qr-container"></div>
+    <h2>Kutipan Acak</h2>
+    <button onclick="generateRandomQuote()">Dapatkan Kutipan Acak</button>
+    <div id="quoteBox" class="output-box"></div>
   </section>
 
+  <!-- BMI Calculator -->
   <section>
-    <h2>4. Fitur Lain - Hitung Checksum MD5</h2>
-    <input type="text" id="checksumInput" placeholder="Masukkan teks untuk checksum" oninput="calculateChecksum()">
-    <p>Checksum (MD5): <span id="checksumOutput" class="output-box"></span></p>
+    <h2>Penghitung BMI</h2>
+    <input type="number" id="weight" placeholder="Masukkan Berat Badan (kg)">
+    <input type="number" id="height" placeholder="Masukkan Tinggi Badan (cm)">
+    <button onclick="calculateBMI()">Hitung BMI</button>
+    <p>Hasil BMI: <span id="bmiResult" class="output-box"></span></p>
   </section>
 
-  <footer>
-    <p>© 2025 Han | Cybersecurity, Informatika dan QR Code Fitur</p>
-  </footer>
+  <!-- Age Calculator -->
+  <section>
+    <h2>Penghitung Umur</h2>
+    <input type="date" id="birthDate">
+    <button onclick="calculateAge()">Hitung Umur</button>
+    <p>Umur: <span id="ageResult" class="output-box"></span></p>
+  </section>
 
+  <!-- Random Number Generator -->
+  <section>
+    <h2>Random Number Generator</h2>
+    <input type="number" id="minNum" placeholder="Min">
+    <input type="number" id="maxNum" placeholder="Max">
+    <button onclick="generateRandomNumber()">Generate Angka</button>
+    <p>Angka Acak: <span id="randomNum" class="output-box"></span></p>
+  </section>
+
+  <!-- Temperature Converter -->
+  <section>
+    <h2>Konversi Suhu</h2>
+    <input type="number" id="tempInput" placeholder="Masukkan Suhu">
+    <select id="tempUnit">
+      <option value="CtoF">Celcius ke Fahrenheit</option>
+      <option value="FtoC">Fahrenheit ke Celcius</option>
+    </select>
+    <button onclick="convertTemperature()">Konversi</button>
+    <p>Hasil Konversi: <span id="tempOutput" class="output-box"></span></p>
+  </section>
+
+  <!-- Date Difference Calculator -->
+  <section>
+    <h2>Penghitung Selisih Tanggal</h2>
+    <input type="date" id="startDate">
+    <input type="date" id="endDate">
+    <button onclick="calculateDateDifference()">Hitung Selisih Tanggal</button>
+    <p>Selisih Tanggal: <span id="dateDiff" class="output-box"></span></p>
+  </section>
+
+  <!-- Countdown Timer -->
+  <section>
+    <h2>Timer Penghitung Mundur</h2>
+    <input type="time" id="countdownInput">
+    <button onclick="startCountdown()">Mulai Timer</button>
+    <p>Waktu Tersisa: <span id="countdownOutput" class="output-box"></span></p>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script>
-    // 1. Password Strength Checker
-    function checkPasswordStrength() {
-      const password = document.getElementById('password').value;
-      const strengthBar = document.getElementById('passwordStrength');
-      let strength = 0;
-
-      if (password.length >= 8) strength++;
-      if (/[A-Z]/.test(password)) strength++;
-      if (/[0-9]/.test(password)) strength++;
-      if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-      let strengthMessage = 'Password terlalu lemah';
-      if (strength === 4) {
-        strengthMessage = 'Password sangat kuat';
-        strengthBar.style.color = 'green';
-      } else if (strength === 3) {
-        strengthMessage = 'Password cukup kuat';
-        strengthBar.style.color = 'orange';
-      } else if (strength === 2) {
-        strengthMessage = 'Password lemah';
-        strengthBar.style.color = 'red';
+    // Kalkulator Sederhana
+    function calculate() {
+      const input = document.getElementById('calcInput').value;
+      try {
+        const result = eval(input);
+        document.getElementById('calcOutput').innerText = result;
+      } catch (e) {
+        document.getElementById('calcOutput').innerText = 'Input tidak valid';
       }
-
-      strengthBar.innerHTML = strengthMessage;
     }
 
-    // 2. Convert Decimal to Binary
-    function convertDecimalToBinary() {
-      const decimal = document.getElementById('decimalInput').value;
-      const binary = parseInt(decimal, 10).toString(2);
-      document.getElementById('binaryOutput').innerText = binary || 'Masukkan angka desimal yang valid';
-    }
-
-    // 3. QR Code Generator
+    // QR Code Generator
     function generateQRCode() {
       const text = document.getElementById('qrInput').value;
-      const qrCodeElement = document.getElementById('qrCode');
-
-      // Clear previous QR Code
-      qrCodeElement.innerHTML = '';
-      
-      // Generate new QR code
-      QRCode.toCanvas(qrCodeElement, text, function (error) {
-        if (error) console.error(error);
-        console.log('QR Code generated!');
-      });
+      const qrContainer = document.getElementById('qrContainer');
+      qrContainer.innerHTML = '';
+      new QRCode(qrContainer, text);
     }
 
-    // 4. Calculate MD5 Checksum
-    function calculateChecksum() {
-      const crypto = window.crypto || window.msCrypto; // For IE11
-      const text = document.getElementById('checksumInput').value;
+    // Random Quote Generator
+    function generateRandomQuote() {
+      const quotes = [
+        "The best way to predict the future is to create it.",
+        "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+        "It does not matter how slowly you go as long as you do not stop.",
+        "In the middle of difficulty lies opportunity."
+      ];
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quoteBox').innerText = randomQuote;
+    }
 
-      if (text) {
-        const hashBuffer = crypto.subtle.digest('MD5', new TextEncoder().encode(text));
-        hashBuffer.then(hash => {
-          const hashArray = Array.from(new Uint8Array(hash));
-          const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-          document.getElementById('checksumOutput').innerText = hashHex;
-        });
-      } else {
-        document.getElementById('checksumOutput').innerText = '';
+    // BMI Calculator
+    function calculateBMI() {
+      const weight = parseFloat(document.getElementById('weight').value);
+      const height = parseFloat(document.getElementById('height').value) / 100; // Convert to meters
+      const bmi = (weight / (height * height)).toFixed(2);
+      document.getElementById('bmiResult').innerText = bmi;
+    }
+
+    // Age Calculator
+    function calculateAge() {
+      const birthDate = new Date(document.getElementById('birthDate').value);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      document.getElementById('ageResult').innerText = age;
+    }
+
+    // Random Number Generator
+    function generateRandomNumber() {
+      const min = parseInt(document.getElementById('minNum').value);
+      const max = parseInt(document.getElementById('maxNum').value);
+      const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+      document.getElementById('randomNum').innerText = randomNum;
+    }
+
+    // Temperature Converter
+    function convertTemperature() {
+      const temp = parseFloat(document.getElementById('tempInput').value);
+      const unit = document.getElementById('tempUnit').value;
+      let result;
+      if (unit === 'CtoF') {
+        result = (temp * 9/5) + 32;
+      } else if (unit === 'FtoC') {
+        result = (temp - 32) * 5/9;
       }
+      document.getElementById('tempOutput').innerText = result.toFixed(2);
+    }
+
+    // Date Difference Calculator
+    function calculateDateDifference() {
+      const startDate = new Date(document.getElementById('startDate').value);
+      const endDate = new Date(document.getElementById('endDate').value);
+      const diffTime = Math.abs(endDate - startDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('dateDiff').innerText = diffDays + " hari";
+    }
+
+    // Countdown Timer
+    function startCountdown() {
+      const timeInput = document.getElementById('countdownInput').value;
+      const targetTime = new Date();
+      const [hours, minutes] = timeInput.split(":");
+      targetTime.setHours(hours, minutes, 0);
+      const interval = setInterval(function() {
+        const currentTime = new Date();
+        const timeDiff = targetTime - currentTime;
+        if (timeDiff <= 0) {
+          clearInterval(interval);
+          document.getElementById('countdownOutput').innerText = "Waktu Habis!";
+        } else {
+          const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
+          const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+          document.getElementById('countdownOutput').innerText = `${hoursLeft} jam ${minutesLeft} menit`;
+        }
+      }, 1000);
     }
   </script>
 
