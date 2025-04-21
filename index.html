@@ -44,12 +44,9 @@
       background: #218838;
     }
 
-    #downloadBtn {
-      background: #007bff;
-    }
-
-    #downloadBtn:hover {
-      background: #0056b3;
+    #fileInput {
+      padding: 8px;
+      margin-top: 10px;
     }
 
     .pesan {
@@ -78,26 +75,13 @@
       font-weight: bold;
       color: #333;
     }
-
-    #fileInput {
-      padding: 8px;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
   <h1>👨‍🏫 Website Kelas 10D</h1>
-  <p><strong>Silakan Daftar/Login dan Gunakan Fitur Kelas!</strong></p>
+  <p><strong>Silakan Daftar dan Login terlebih dahulu untuk mengakses fitur kelas!</strong></p>
 
-  <div id="loginSection">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <input type="text" id="loginNama" placeholder="Nama Pengguna" required>
-      <input type="password" id="loginPassword" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-  </div>
-
+  <!-- Bagian Daftar -->
   <div id="registerSection">
     <h2>Daftar Pengguna Baru</h2>
     <form id="registerForm">
@@ -107,6 +91,17 @@
     </form>
   </div>
 
+  <!-- Bagian Login -->
+  <div id="loginSection" style="display:none;">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="loginNama" placeholder="Nama Pengguna" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <!-- Bagian Utama setelah login -->
   <div id="mainSection" style="display:none;">
     <h2>Selamat Datang, <span id="userNameDisplay"></span>!</h2>
     <button id="logoutBtn">Logout</button>
@@ -123,12 +118,6 @@
       <button type="submit">Kirim Pesan</button>
     </form>
 
-    <h3>Kirim Dokumen</h3>
-    <form id="dokumenForm">
-      <input type="file" id="fileInput" accept=".jpg, .jpeg, .png, .pdf" required>
-      <button type="submit">Kirim Dokumen</button>
-    </form>
-
     <h3>Pesan yang Dikirim:</h3>
     <div id="outputMessages"></div>
   </div>
@@ -136,6 +125,21 @@
   <script>
     let pengguna = JSON.parse(localStorage.getItem('pengguna')) || [];
     let pesanList = [];
+
+    // Fungsi untuk menampilkan pesan
+    function tampilkanPesan() {
+      const output = document.getElementById("outputMessages");
+      output.innerHTML = '';
+      pesanList.forEach(pesan => {
+        let pesanClass = pesan.kategori === 'pribadi' ? 'pribadi' : 'publik';
+        output.innerHTML += `
+          <div class="pesan ${pesanClass}">
+            <div class="msg-header">${pesan.dari} → ${pesan.kepada}</div>
+            <em>"${pesan.isi}"</em>
+            <small>🕒 ${pesan.waktu}</small>
+          </div>`;
+      });
+    }
 
     // Login Section
     document.getElementById("loginForm").addEventListener("submit", function(e) {
@@ -164,6 +168,7 @@
         pengguna.push({ nama, password });
         localStorage.setItem('pengguna', JSON.stringify(pengguna));
         alert("Registrasi berhasil, silakan login!");
+        toggleView("login");
       }
     });
 
@@ -173,13 +178,17 @@
       window.location.reload();
     });
 
-    // Display Logged In User
+    // Tampilkan User yang sudah login
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser) {
-      document.getElementById("loginSection").style.display = "none";
       document.getElementById("registerSection").style.display = "none";
+      document.getElementById("loginSection").style.display = "none";
       document.getElementById("mainSection").style.display = "block";
       document.getElementById("userNameDisplay").innerText = currentUser.nama;
+    } else {
+      document.getElementById("registerSection").style.display = "block";
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("mainSection").style.display = "none";
     }
 
     // Kirim Pesan
@@ -205,29 +214,18 @@
       this.reset();
     });
 
-    // Tampilkan Pesan
-    function tampilkanPesan() {
-      const output = document.getElementById("outputMessages");
-      output.innerHTML = '';
-      pesanList.forEach(pesan => {
-        let pesanClass = pesan.kategori === 'pribadi' ? 'pribadi' : 'publik';
-        output.innerHTML += `
-          <div class="pesan ${pesanClass}">
-            <div class="msg-header">${pesan.dari} → ${pesan.kepada}</div>
-            <em>"${pesan.isi}"</em>
-            <small>🕒 ${pesan.waktu}</small>
-          </div>`;
-      });
-    }
-
-    // Kirim Dokumen
-    document.getElementById("dokumenForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const file = document.getElementById("fileInput").files[0];
-      if (file) {
-        alert(`Dokumen ${file.name} berhasil dikirim!`);
+    // Fungsi untuk mengganti tampilan
+    function toggleView(view) {
+      if (view === "login") {
+        document.getElementById("registerSection").style.display = "none";
+        document.getElementById("loginSection").style.display = "block";
+        document.getElementById("mainSection").style.display = "none";
+      } else if (view === "main") {
+        document.getElementById("registerSection").style.display = "none";
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("mainSection").style.display = "block";
       }
-    });
+    }
   </script>
 </body>
 </html>
