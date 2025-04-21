@@ -2,244 +2,180 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Kelas 10D - Saudara Sejati 💯</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Han Site - Cybersecurity, Informatika, QR dan Lainnya</title>
   <style>
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Basic Styling */
     body {
       font-family: Arial, sans-serif;
-      background: #333; /* Background gelap */
-      color: #fff; /* Teks putih */
+      background-color: #f4f4f4;
+      color: #333;
       padding: 20px;
     }
 
-    h1, h2 {
-      color: #fff; /* Judul dengan warna putih */
-    }
-
-    form, .output-box {
-      background: #444; /* Formulir dengan latar belakang abu-abu gelap */
-      padding: 15px;
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
       border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
-    input, select, textarea {
+    h1 {
+      font-size: 2.5em;
+    }
+
+    section {
+      margin: 30px 0;
+    }
+
+    h2 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    input, button {
       width: 100%;
       padding: 10px;
-      margin: 6px 0;
-      border: 1px solid #888;
-      border-radius: 4px;
-      background-color: #222; /* Latar belakang input gelap */
-      color: #fff; /* Teks input putih */
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
 
     button {
-      background: #555; /* Tombol dengan latar belakang abu-abu */
+      background-color: #3498db;
       color: white;
-      padding: 10px 20px;
       border: none;
-      border-radius: 4px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #666; /* Tombol berubah lebih terang saat hover */
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #777;
     }
 
-    .pesan {
-      background: #444; /* Pesan dengan latar belakang abu-abu gelap */
-      padding: 10px;
-      border-left: 4px solid #fff; /* Pesan dengan garis putih di sebelah kiri */
-      margin-bottom: 10px;
-      border-radius: 4px;
-      font-size: 14px;
+    .output-box {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 15px;
     }
 
-    .pesan small {
-      display: block;
-      color: #bbb; /* Teks kecil dengan warna abu-abu */
+    .qr-container {
+      margin-top: 20px;
     }
-
-    .pesan.pribadi {
-      border-left-color: #ff9800; /* Pesan pribadi dengan garis oranye */
-    }
-
-    .pesan.publik {
-      border-left-color: #007bff; /* Pesan publik dengan garis biru */
-    }
-
-    .msg-header {
-      font-weight: bold;
-      color: #fff; /* Header pesan putih */
-    }
-
-    h3 {
-      color: #fff; /* Heading warna putih */
-    }
-
-    /* Styling tambahan untuk elemen lain */
-    #registerSection, #loginSection, #mainSection {
-      background: #333;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-
-    .error {
-      color: #e74c3c; /* Warna merah untuk error */
-    }
-
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-  <h1>👨‍🏫 Website Kelas 10D</h1>
-  <p><strong>Silakan Daftar dan Login terlebih dahulu untuk mengakses fitur kelas!</strong></p>
 
-  <!-- Bagian Daftar -->
-  <div id="registerSection">
-    <h2>Daftar Pengguna Baru</h2>
-    <form id="registerForm">
-      <input type="text" id="registerNama" placeholder="Nama Pengguna" required>
-      <input type="password" id="registerPassword" placeholder="Password" required>
-      <button type="submit">Daftar</button>
-    </form>
-  </div>
+  <header>
+    <h1>Han Site - Cybersecurity, Informatika, QR dan Fitur Lainnya</h1>
+  </header>
 
-  <!-- Bagian Login -->
-  <div id="loginSection" style="display:none;">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <input type="text" id="loginNama" placeholder="Nama Pengguna" required>
-      <input type="password" id="loginPassword" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-  </div>
+  <section>
+    <h2>1. Cybersecurity - Password Strength Checker</h2>
+    <input type="password" id="password" placeholder="Masukkan password" oninput="checkPasswordStrength()">
+    <div id="passwordStrength" class="output-box"></div>
+  </section>
 
-  <!-- Bagian Utama setelah login -->
-  <div id="mainSection" style="display:none;">
-    <h2>Selamat Datang, <span id="userNameDisplay"></span>!</h2>
-    <button id="logoutBtn">Logout</button>
+  <section>
+    <h2>2. Informatika - Konversi Desimal ke Biner</h2>
+    <input type="number" id="decimalInput" placeholder="Masukkan angka desimal" oninput="convertDecimalToBinary()">
+    <p>Hasil Biner: <span id="binaryOutput" class="output-box"></span></p>
+  </section>
 
-    <h3>Pesan</h3>
-    <form id="pesanForm">
-      <input type="text" id="pesanDari" placeholder="Dari (Nama Pengirim)" required>
-      <input type="text" id="pesanKepada" placeholder="Kepada (Nama Penerima) / 'Semua' untuk publik" required>
-      <textarea id="pesanIsi" rows="3" placeholder="Tulis pesan..." required></textarea>
-      <select id="pesanKategori" required>
-        <option value="pribadi">Pesan Pribadi</option>
-        <option value="publik">Pesan Publik</option>
-      </select>
-      <button type="submit">Kirim Pesan</button>
-    </form>
+  <section>
+    <h2>3. QR Code Generator</h2>
+    <input type="text" id="qrInput" placeholder="Masukkan teks untuk QR Code" oninput="generateQRCode()">
+    <div id="qrCode" class="qr-container"></div>
+  </section>
 
-    <h3>Pesan yang Dikirim:</h3>
-    <div id="outputMessages"></div>
-  </div>
+  <section>
+    <h2>4. Fitur Lain - Hitung Checksum MD5</h2>
+    <input type="text" id="checksumInput" placeholder="Masukkan teks untuk checksum" oninput="calculateChecksum()">
+    <p>Checksum (MD5): <span id="checksumOutput" class="output-box"></span></p>
+  </section>
+
+  <footer>
+    <p>© 2025 Han | Cybersecurity, Informatika dan QR Code Fitur</p>
+  </footer>
 
   <script>
-    let pengguna = JSON.parse(localStorage.getItem('pengguna')) || [];
-    let pesanList = JSON.parse(localStorage.getItem('pesanList')) || [];
+    // 1. Password Strength Checker
+    function checkPasswordStrength() {
+      const password = document.getElementById('password').value;
+      const strengthBar = document.getElementById('passwordStrength');
+      let strength = 0;
 
-    function tampilkanPesan() {
-      const output = document.getElementById("outputMessages");
-      output.innerHTML = '';
-      pesanList.forEach(pesan => {
-        let pesanClass = pesan.kategori === 'pribadi' ? 'pribadi' : 'publik';
-        output.innerHTML += `
-          <div class="pesan ${pesanClass}">
-            <div class="msg-header">${pesan.dari} → ${pesan.kepada}</div>
-            <em>"${pesan.isi}"</em>
-            <small>🕒 ${pesan.waktu}</small>
-          </div>`;
+      if (password.length >= 8) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      let strengthMessage = 'Password terlalu lemah';
+      if (strength === 4) {
+        strengthMessage = 'Password sangat kuat';
+        strengthBar.style.color = 'green';
+      } else if (strength === 3) {
+        strengthMessage = 'Password cukup kuat';
+        strengthBar.style.color = 'orange';
+      } else if (strength === 2) {
+        strengthMessage = 'Password lemah';
+        strengthBar.style.color = 'red';
+      }
+
+      strengthBar.innerHTML = strengthMessage;
+    }
+
+    // 2. Convert Decimal to Binary
+    function convertDecimalToBinary() {
+      const decimal = document.getElementById('decimalInput').value;
+      const binary = parseInt(decimal, 10).toString(2);
+      document.getElementById('binaryOutput').innerText = binary || 'Masukkan angka desimal yang valid';
+    }
+
+    // 3. QR Code Generator
+    function generateQRCode() {
+      const text = document.getElementById('qrInput').value;
+      const qrCodeElement = document.getElementById('qrCode');
+
+      // Clear previous QR Code
+      qrCodeElement.innerHTML = '';
+      
+      // Generate new QR code
+      QRCode.toCanvas(qrCodeElement, text, function (error) {
+        if (error) console.error(error);
+        console.log('QR Code generated!');
       });
     }
 
-    // Login Section
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const nama = document.getElementById("loginNama").value.trim();
-      const password = document.getElementById("loginPassword").value.trim();
-      const user = pengguna.find(u => u.nama === nama && u.password === password);
+    // 4. Calculate MD5 Checksum
+    function calculateChecksum() {
+      const crypto = window.crypto || window.msCrypto; // For IE11
+      const text = document.getElementById('checksumInput').value;
 
-      if (user) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        window.location.reload();
+      if (text) {
+        const hashBuffer = crypto.subtle.digest('MD5', new TextEncoder().encode(text));
+        hashBuffer.then(hash => {
+          const hashArray = Array.from(new Uint8Array(hash));
+          const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+          document.getElementById('checksumOutput').innerText = hashHex;
+        });
       } else {
-        alert("Nama atau Password salah");
-      }
-    });
-
-    // Register Section
-    document.getElementById("registerForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const nama = document.getElementById("registerNama").value.trim();
-      const password = document.getElementById("registerPassword").value.trim();
-
-      if (pengguna.find(u => u.nama === nama)) {
-        alert("Pengguna sudah terdaftar!");
-      } else {
-        pengguna.push({ nama, password });
-        localStorage.setItem('pengguna', JSON.stringify(pengguna));
-        alert("Registrasi berhasil, silakan login!");
-        toggleView("login");
-      }
-    });
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", function() {
-      localStorage.removeItem('currentUser');
-      window.location.reload();
-    });
-
-    // Tampilkan User yang sudah login
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser) {
-      document.getElementById("registerSection").style.display = "none";
-      document.getElementById("loginSection").style.display = "none";
-      document.getElementById("mainSection").style.display = "block";
-      document.getElementById("userNameDisplay").innerText = currentUser.nama;
-    } else {
-      document.getElementById("registerSection").style.display = "block";
-      document.getElementById("loginSection").style.display = "none";
-      document.getElementById("mainSection").style.display = "none";
-    }
-
-    // Kirim Pesan
-    document.getElementById("pesanForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const dari = document.getElementById("pesanDari").value;
-      const kepada = document.getElementById("pesanKepada").value;
-      const isi = document.getElementById("pesanIsi").value;
-      const kategori = document.getElementById("pesanKategori").value;
-
-      if (!dari || !kepada || !isi) return;
-
-      const pesan = {
-        dari,
-        kepada,
-        isi,
-        kategori,
-        waktu: new Date().toLocaleString()
-      };
-
-      pesanList.push(pesan);
-      localStorage.setItem('pesanList', JSON.stringify(pesanList));
-      tampilkanPesan();
-      this.reset();
-    });
-
-    // Fungsi untuk mengganti tampilan
-    function toggleView(view) {
-      if (view === "login") {
-        document.getElementById("registerSection").style.display = "none";
-        document.getElementById("loginSection").style.display = "block";
-        document.getElementById("mainSection").style.display = "none";
-      } else if (view === "main") {
-        document.getElementById("registerSection").style.display = "none";
-        document.getElementById("loginSection").style.display = "none";
-        document.getElementById("mainSection").style.display = "block";
+        document.getElementById('checksumOutput').innerText = '';
       }
     }
   </script>
+
 </body>
 </html>
