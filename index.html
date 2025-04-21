@@ -6,33 +6,35 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f8f9fa;
+      background: #333; /* Background gelap */
+      color: #fff; /* Teks putih */
       padding: 20px;
-      color: #333;
     }
 
     h1, h2 {
-      color: #2c3e50;
+      color: #fff; /* Judul dengan warna putih */
     }
 
     form, .output-box {
-      background: white;
+      background: #444; /* Formulir dengan latar belakang abu-abu gelap */
       padding: 15px;
       border-radius: 8px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
     input, select, textarea {
       width: 100%;
       padding: 10px;
       margin: 6px 0;
-      border: 1px solid #ccc;
+      border: 1px solid #888;
       border-radius: 4px;
+      background-color: #222; /* Latar belakang input gelap */
+      color: #fff; /* Teks input putih */
     }
 
     button {
-      background: #28a745;
+      background: #555; /* Tombol dengan latar belakang abu-abu */
       color: white;
       padding: 10px 20px;
       border: none;
@@ -41,18 +43,13 @@
     }
 
     button:hover {
-      background: #218838;
-    }
-
-    #fileInput {
-      padding: 8px;
-      margin-top: 10px;
+      background: #666; /* Tombol berubah lebih terang saat hover */
     }
 
     .pesan {
-      background: #fff;
+      background: #444; /* Pesan dengan latar belakang abu-abu gelap */
       padding: 10px;
-      border-left: 4px solid #007bff;
+      border-left: 4px solid #fff; /* Pesan dengan garis putih di sebelah kiri */
       margin-bottom: 10px;
       border-radius: 4px;
       font-size: 14px;
@@ -60,21 +57,38 @@
 
     .pesan small {
       display: block;
-      color: #666;
+      color: #bbb; /* Teks kecil dengan warna abu-abu */
     }
 
     .pesan.pribadi {
-      border-left-color: #ff9800; /* Pesan pribadi */
+      border-left-color: #ff9800; /* Pesan pribadi dengan garis oranye */
     }
 
     .pesan.publik {
-      border-left-color: #007bff; /* Pesan publik */
+      border-left-color: #007bff; /* Pesan publik dengan garis biru */
     }
-    
+
     .msg-header {
       font-weight: bold;
-      color: #333;
+      color: #fff; /* Header pesan putih */
     }
+
+    h3 {
+      color: #fff; /* Heading warna putih */
+    }
+
+    /* Styling tambahan untuk elemen lain */
+    #registerSection, #loginSection, #mainSection {
+      background: #333;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .error {
+      color: #e74c3c; /* Warna merah untuk error */
+    }
+
   </style>
 </head>
 <body>
@@ -124,9 +138,8 @@
 
   <script>
     let pengguna = JSON.parse(localStorage.getItem('pengguna')) || [];
-    let pesanList = [];
+    let pesanList = JSON.parse(localStorage.getItem('pesanList')) || [];
 
-    // Fungsi untuk menampilkan pesan
     function tampilkanPesan() {
       const output = document.getElementById("outputMessages");
       output.innerHTML = '';
@@ -210,6 +223,7 @@
       };
 
       pesanList.push(pesan);
+      localStorage.setItem('pesanList', JSON.stringify(pesanList));
       tampilkanPesan();
       this.reset();
     });
