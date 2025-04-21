@@ -52,17 +52,31 @@
       background: #0056b3;
     }
 
-    .pesan, .absensi, .jabatan {
+    .pesan {
       background: #fff;
       padding: 10px;
       border-left: 4px solid #007bff;
       margin-bottom: 10px;
       border-radius: 4px;
+      font-size: 14px;
     }
 
     .pesan small {
       display: block;
       color: #666;
+    }
+
+    .pesan.pribadi {
+      border-left-color: #ff9800; /* Pesan pribadi */
+    }
+
+    .pesan.publik {
+      border-left-color: #007bff; /* Pesan publik */
+    }
+    
+    .msg-header {
+      font-weight: bold;
+      color: #333;
     }
 
     #fileInput {
@@ -100,8 +114,12 @@
     <h3>Pesan</h3>
     <form id="pesanForm">
       <input type="text" id="pesanDari" placeholder="Dari (Nama Pengirim)" required>
-      <input type="text" id="pesanKepada" placeholder="Kepada (Nama Penerima)" required>
+      <input type="text" id="pesanKepada" placeholder="Kepada (Nama Penerima) / 'Semua' untuk publik" required>
       <textarea id="pesanIsi" rows="3" placeholder="Tulis pesan..." required></textarea>
+      <select id="pesanKategori" required>
+        <option value="pribadi">Pesan Pribadi</option>
+        <option value="publik">Pesan Publik</option>
+      </select>
       <button type="submit">Kirim Pesan</button>
     </form>
 
@@ -111,36 +129,13 @@
       <button type="submit">Kirim Dokumen</button>
     </form>
 
-    <h3>Absensi</h3>
-    <form id="absensiForm">
-      <input type="text" id="absensiNama" placeholder="Nama Siswa" required>
-      <select id="absensiStatus" required>
-        <option value="Hadir">Hadir</option>
-        <option value="Tidak Hadir">Tidak Hadir</option>
-        <option value="Izin">Izin</option>
-        <option value="Sakit">Sakit</option>
-      </select>
-      <textarea id="absensiKeterangan" placeholder="Keterangan (opsional)"></textarea>
-      <button type="submit">Simpan Absensi</button>
-    </form>
-
-    <h3>Jabatan Kelas</h3>
-    <form id="jabatanForm">
-      <input type="text" id="jabatanNama" placeholder="Nama Siswa" required>
-      <input type="text" id="jabatan" placeholder="Jabatan Kelas (misalnya Ketua, Sekretaris)" required>
-      <button type="submit">Set Jabatan</button>
-    </form>
-
+    <h3>Pesan yang Dikirim:</h3>
     <div id="outputMessages"></div>
-    <div id="outputAbsensi"></div>
-    <div id="outputJabatan"></div>
   </div>
 
   <script>
     let pengguna = JSON.parse(localStorage.getItem('pengguna')) || [];
     let pesanList = [];
-    let absensiList = [];
-    let jabatanList = [];
 
     // Login Section
     document.getElementById("loginForm").addEventListener("submit", function(e) {
@@ -193,8 +188,19 @@
       const dari = document.getElementById("pesanDari").value;
       const kepada = document.getElementById("pesanKepada").value;
       const isi = document.getElementById("pesanIsi").value;
+      const kategori = document.getElementById("pesanKategori").value;
 
-      pesanList.push({ dari, kepada, isi, waktu: new Date().toLocaleString() });
+      if (!dari || !kepada || !isi) return;
+
+      const pesan = {
+        dari,
+        kepada,
+        isi,
+        kategori,
+        waktu: new Date().toLocaleString()
+      };
+
+      pesanList.push(pesan);
       tampilkanPesan();
       this.reset();
     });
@@ -204,9 +210,10 @@
       const output = document.getElementById("outputMessages");
       output.innerHTML = '';
       pesanList.forEach(pesan => {
+        let pesanClass = pesan.kategori === 'pribadi' ? 'pribadi' : 'publik';
         output.innerHTML += `
-          <div class="pesan">
-            <strong>${pesan.dari} → ${pesan.kepada}</strong><br>
+          <div class="pesan ${pesanClass}">
+            <div class="msg-header">${pesan.dari} → ${pesan.kepada}</div>
             <em>"${pesan.isi}"</em>
             <small>🕒 ${pesan.waktu}</small>
           </div>`;
@@ -221,53 +228,6 @@
         alert(`Dokumen ${file.name} berhasil dikirim!`);
       }
     });
-
-    // Absensi
-    document.getElementById("absensiForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const nama = document.getElementById("absensiNama").value;
-      const status = document.getElementById("absensiStatus").value;
-      const keterangan = document.getElementById("absensiKeterangan").value;
-
-      absensiList.push({ nama, status, keterangan, waktu: new Date().toLocaleString() });
-      tampilkanAbsensi();
-      this.reset();
-    });
-
-    function tampilkanAbsensi() {
-      const output = document.getElementById("outputAbsensi");
-      output.innerHTML = '';
-      absensiList.forEach(absen => {
-        output.innerHTML += `
-          <div class="absensi">
-            <strong>${absen.nama} - ${absen.status}</strong><br>
-            <em>${absen.keterangan || 'No Keterangan'}</em>
-            <small>🕒 ${absen.waktu}</small>
-          </div>`;
-      });
-    }
-
-    // Jabatan Kelas
-    document.getElementById("jabatanForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const nama = document.getElementById("jabatanNama").value;
-      const jabatan = document.getElementById("jabatan").value;
-
-      jabatanList.push({ nama, jabatan });
-      tampilkanJabatan();
-      this.reset();
-    });
-
-    function tampilkanJabatan() {
-      const output = document.getElementById("outputJabatan");
-      output.innerHTML = '';
-      jabatanList.forEach(jabatan => {
-        output.innerHTML += `
-          <div class="jabatan">
-            <strong>${jabatan.nama} - ${jabatan.jabatan}</strong>
-          </div>`;
-      });
-    }
   </script>
 </body>
 </html>
