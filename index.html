@@ -1,183 +1,33 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Han Site - GABUT</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f4; }
-    header { background: #3498db; color: white; padding: 10px; text-align: center; }
-    section { margin-top: 20px; }
-    input, button { padding: 10px; width: 100%; margin: 5px 0; }
-    .output-box { background: white; padding: 10px; border-radius: 5px; }
-    button:hover { background-color: #2980b9; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tebak Angka</title>
 </head>
 <body>
+    <h1>Tebak Angka!</h1>
+    <p>Saya sudah memilih angka antara 1 dan 100, tebak angka saya!</p>
+    <input type="number" id="guess" placeholder="Tebak angka...">
+    <button onclick="checkGuess()">Tebak</button>
+    <p id="message"></p>
 
-  <header>
-    <h1>GABUT PROJECT'S</h1>
-  </header>
+    <script>
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
+        console.log(randomNumber); // Untuk tujuan debugging
 
-  <!-- Kalkulator Sederhana -->
-  <section>
-    <h2>Kalkulator Sederhana</h2>
-    <input type="text" id="calcInput" placeholder="Masukkan perhitungan (contoh: 5+3)" oninput="calculate()">
-    <p>Hasil: <span id="calcOutput" class="output-box"></span></p>
-  </section>
+        function checkGuess() {
+            const userGuess = document.getElementById('guess').value;
+            const message = document.getElementById('message');
 
-  <!-- QR Code Generator -->
-  <section>
-    <h2>QR Code Generator</h2>
-    <input type="text" id="qrInput" placeholder="Masukkan URL atau teks untuk QR Code">
-    <button onclick="generateQRCode()">Buat QR Code</button>
-    <div id="qrContainer"></div>
-  </section>
-
-  <!-- Random Quote Generator -->
-  <section>
-    <h2>Kutipan Acak</h2>
-    <button onclick="generateRandomQuote()">Dapatkan Kutipan Acak</button>
-    <div id="quoteBox" class="output-box"></div>
-  </section>
-
-  <!-- BMI Calculator -->
-  <section>
-    <h2>Penghitung BMI</h2>
-    <input type="number" id="weight" placeholder="Masukkan Berat Badan (kg)">
-    <input type="number" id="height" placeholder="Masukkan Tinggi Badan (cm)">
-    <button onclick="calculateBMI()">Hitung BMI</button>
-    <p>Hasil BMI: <span id="bmiResult" class="output-box"></span></p>
-  </section>
-
-  <!-- Age Calculator -->
-  <section>
-    <h2>Penghitung Umur</h2>
-    <input type="date" id="birthDate">
-    <button onclick="calculateAge()">Hitung Umur</button>
-    <p>Umur: <span id="ageResult" class="output-box"></span></p>
-  </section>
-
-  <!-- Random Number Generator -->
-  <section>
-    <h2>Random Number Generator</h2>
-    <input type="number" id="minNum" placeholder="Min">
-    <input type="number" id="maxNum" placeholder="Max">
-    <button onclick="generateRandomNumber()">Generate Angka</button>
-    <p>Angka Acak: <span id="randomNum" class="output-box"></span></p>
-  </section>
-
-  <!-- Temperature Converter -->
-  <section>
-    <h2>Konversi Suhu</h2>
-    <input type="number" id="tempInput" placeholder="Masukkan Suhu">
-    <select id="tempUnit">
-      <option value="CtoF">Celcius ke Fahrenheit</option>
-      <option value="FtoC">Fahrenheit ke Celcius</option>
-    </select>
-    <button onclick="convertTemperature()">Konversi</button>
-    <p>Hasil Konversi: <span id="tempOutput" class="output-box"></span></p>
-  </section>
-
-  <!-- Date Difference Calculator -->
-  <section>
-    <h2>Penghitung Selisih Tanggal</h2>
-    <input type="date" id="startDate">
-    <input type="date" id="endDate">
-    <button onclick="calculateDateDifference()">Hitung Selisih Tanggal</button>
-    <p>Selisih Tanggal: <span id="dateDiff" class="output-box"></span></p>
-  </section>
-
-  <!-- Countdown Timer -->
-  <section>
-    <h2>Timer Penghitung Mundur</h2>
-    <input type="time" id="countdownInput">
-    <button onclick="startCountdown()">Mulai Timer</button>
-    <p>Waktu Tersisa: <span id="countdownOutput" class="output-box"></span></p>
-  </section>
-
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script>
-    function calculate() {
-        const input = document.getElementById('calcInput').value;
-        try {
-            if (/^[0-9+\-*/().\s]+$/.test(input)) {
-                const result = eval(input);
-                document.getElementById('calcOutput').innerText = result;
+            if (userGuess == randomNumber) {
+                message.textContent = "Selamat! Kamu menebak dengan benar!";
+            } else if (userGuess < randomNumber) {
+                message.textContent = "Terlalu rendah, coba lagi!";
             } else {
-                throw new Error('Invalid input');
+                message.textContent = "Terlalu tinggi, coba lagi!";
             }
-        } catch (e) {
-            document.getElementById('calcOutput').innerText = 'Input tidak valid';
         }
-    }
-
-    function generateQRCode() {
-        const text = document.getElementById('qrInput').value;
-        const qrContainer = document.getElementById('qrContainer');
-        qrContainer.innerHTML = '';
-        if (text.trim() !== '') {
-            new QRCode(qrContainer, text);
-        } else {
-            qrContainer.innerText = 'Input tidak valid untuk QR Code';
-        }
-    }
-
-    function calculateBMI() {
-        const weight = parseFloat(document.getElementById('weight').value);
-        const height = parseFloat(document.getElementById('height').value) / 100;
-        if (weight > 0 && height > 0) {
-            const bmi = (weight / (height * height)).toFixed(2);
-            document.getElementById('bmiResult').innerText = bmi;
-        } else {
-            document.getElementById('bmiResult').innerText = 'Masukkan berat dan tinggi yang valid';
-        }
-    }
-
-    function calculateAge() {
-        const birthDate = new Date(document.getElementById('birthDate').value);
-        const today = new Date();
-        if (birthDate <= today) {
-            const age = today.getFullYear() - birthDate.getFullYear();
-            document.getElementById('ageResult').innerText = age;
-        } else {
-            document.getElementById('ageResult').innerText = 'Tanggal lahir tidak valid';
-        }
-    }
-
-    function generateRandomNumber() {
-        const min = parseInt(document.getElementById('minNum').value);
-        const max = parseInt(document.getElementById('maxNum').value);
-        if (min < max) {
-            const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-            document.getElementById('randomNum').innerText = randomNum;
-        } else {
-            document.getElementById('randomNum').innerText = 'Min harus lebih kecil dari Max';
-        }
-    }
-
-    function startCountdown() {
-        const timeInput = document.getElementById('countdownInput').value;
-        if (timeInput) {
-            const targetTime = new Date();
-            const [hours, minutes] = timeInput.split(":").map(Number);
-            targetTime.setHours(hours, minutes, 0);
-            const interval = setInterval(function () {
-                const currentTime = new Date();
-                const timeDiff = targetTime - currentTime;
-                if (timeDiff <= 0) {
-                    clearInterval(interval);
-                    document.getElementById('countdownOutput').innerText = "Waktu Habis!";
-                } else {
-                    const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
-                    const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                    document.getElementById('countdownOutput').innerText = `${hoursLeft} jam ${minutesLeft} menit`;
-                }
-            }, 1000);
-        } else {
-            document.getElementById('countdownOutput').innerText = "Input waktu tidak valid";
-        }
-    }
-  </script>
+    </script>
 </body>
 </html>
