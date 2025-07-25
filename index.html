@@ -1,809 +1,1025 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HanQUIS - Platform Kuis Interaktif</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>HanQUIS - Kuis Interaktif</title>
     <style>
+        :root {
+            --primary-bg: #121212;
+            --secondary-bg: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-color: #4a6fa5;
+            --correct-color: #4caf50;
+            --wrong-color: #f44336;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
-            color: #ffffff;
-            line-height: 1.6;
-            overflow-x: hidden;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 2rem;
         }
 
-        /* Navigation */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(15, 15, 15, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-content {
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--secondary-bg);
+            margin-bottom: 2rem;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
-        @keyframes glow {
-            from { filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3)); }
-            to { filter: drop-shadow(0 0 15px rgba(255, 0, 255, 0.3)); }
-        }
-
-        .nav-buttons {
+        nav ul {
             display: flex;
-            gap: 15px;
+            list-style: none;
         }
 
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: var(--text-primary);
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
+            transition: color 0.3s ease;
         }
 
-        .btn-primary {
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .auth-buttons button {
+            background-color: var(--accent-color);
             color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        .btn-secondary {
-            background: transparent;
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+        .auth-buttons button:hover {
+            background-color: #3a5a80;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
-        }
-
-        /* Pages */
-        .page {
-            display: none;
-            min-height: 100vh;
-            padding-top: 80px;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        /* Landing Page */
         .hero {
             text-align: center;
-            padding: 100px 0;
-            position: relative;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
+            padding: 4rem 0;
         }
 
         .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: fadeInUp 1s ease-out;
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
         .hero p {
             font-size: 1.2rem;
-            color: #b0b0b0;
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeInUp 1s ease-out 0.2s both;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
         }
 
-        .cta-button {
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
-            border: none;
-            border-radius: 50px;
+        .start-btn {
+            background-color: var(--accent-color);
             color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.3s ease;
-            animation: fadeInUp 1s ease-out 0.4s both;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+        .start-btn:hover {
+            background-color: #3a5a80;
+            transform: translateY(-2px);
         }
 
         /* Auth Forms */
         .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: calc(100vh - 80px);
-            padding: 40px 0;
-        }
-
-        .auth-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-            width: 100%;
             max-width: 400px;
-            animation: slideInUp 0.6s ease-out;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--secondary-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .auth-card h2 {
+        .auth-container h2 {
+            margin-bottom: 1.5rem;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #b0b0b0;
-            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
         }
 
-        .form-control {
+        .form-group input {
             width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: #ffffff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            padding: 0.8rem;
+            background-color: var(--primary-bg);
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: var(--text-primary);
         }
 
-        .form-control:focus {
+        .form-group input:focus {
             outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #3a5a80;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-footer a {
+            color: var(--accent-color);
+            text-decoration: none;
         }
 
         /* Dashboard */
-        .dashboard {
-            padding: 40px 0;
-        }
-
         .dashboard-header {
-            text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 2rem;
         }
 
-        .dashboard-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ffffff, #00d4ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .welcome-message {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .categories-grid {
+        .category-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
 
         .category-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
+            background-color: var(--secondary-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .category-card:hover::before {
-            left: 100%;
         }
 
         .category-card:hover {
-            transform: translateY(-10px);
-            border-color: #00d4ff;
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
-        }
-
-        .category-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .category-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
         }
 
         .category-card p {
-            color: #b0b0b0;
-            margin-bottom: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .start-quiz-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .start-quiz-btn:hover {
+            background-color: #3a5a80;
         }
 
         /* Quiz Page */
         .quiz-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
         }
 
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            margin-bottom: 2rem;
         }
 
-        .quiz-progress {
+        .quiz-info {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            gap: 1rem;
         }
 
-        .progress-bar {
-            width: 200px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .timer {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #00d4ff;
-        }
-
-        .question-card {
-            background: rgba(255, 255, 255, 0.05);
+        .quiz-info span {
+            background-color: var(--secondary-bg);
+            padding: 0.3rem 0.8rem;
             border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .question-container {
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .question-number {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
         }
 
         .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            line-height: 1.6;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
-        .options {
+        .options-container {
             display: grid;
-            gap: 15px;
+            gap: 1rem;
         }
 
         .option {
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background-color: var(--primary-bg);
+            padding: 1rem;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            transition: background-color 0.3s ease;
+            border: 1px solid #333;
         }
 
         .option:hover {
-            border-color: #00d4ff;
-            background: rgba(0, 212, 255, 0.1);
+            background-color: #252525;
         }
 
         .option.selected {
-            border-color: #00d4ff;
-            background: rgba(0, 212, 255, 0.2);
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
-        .option-letter {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
-            border-radius: 50%;
+        .option.correct {
+            background-color: var(--correct-color);
+            border-color: var(--correct-color);
+        }
+
+        .option.wrong {
+            background-color: var(--wrong-color);
+            border-color: var(--wrong-color);
+        }
+
+        .navigation-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            flex-shrink: 0;
+            justify-content: space-between;
+        }
+
+        .nav-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #3a5a80;
+        }
+
+        .nav-btn:disabled {
+            background-color: #333;
+            cursor: not-allowed;
         }
 
         /* Results Page */
         .results-container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 40px 20px;
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .results-header {
             text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-header h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
         }
 
         .score-display {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
         }
 
-        .score-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, #00d4ff 0%, #ff00ff 100%);
+        .stats {
             display: flex;
-            align-items: center;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .review-section h3 {
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .review-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .review-question {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-answer.correct {
+            color: var(--correct-color);
+        }
+
+        .user-answer.wrong {
+            color: var(--wrong-color);
+        }
+
+        .correct-answer {
+            color: var(--correct-color);
+            font-weight: bold;
+        }
+
+        .explanation {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .actions {
+            display: flex;
             justify-content: center;
-            margin: 0 auto 20px;
-            position: relative;
+            margin-top: 2rem;
+            gap: 1rem;
         }
 
-        .score-circle::before {
-            content: '';
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background: #1a1a1a;
-            border-radius: 50%;
+        .action-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .score-text {
-            position: relative;
-            z-index: 2;
-            font-size: 2rem;
-            font-weight: 700;
+        .action-btn:hover {
+            background-color: #3a5a80;
+        }
+
+        .secondary-btn {
+            background-color: #333;
+        }
+
+        .secondary-btn:hover {
+            background-color: #444;
         }
 
         /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+            .container {
+                padding: 1rem;
             }
-            
-            .categories-grid {
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .category-cards {
                 grid-template-columns: 1fr;
             }
-            
-            .nav-content {
+
+            .stats {
                 flex-direction: column;
-                gap: 15px;
+                gap: 1rem;
             }
-            
-            .quiz-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .alert-success {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            color: #22c55e;
-        }
-
-        .alert-error {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #ef4444;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">HanQUIS</div>
-                <div class="nav-buttons">
-                    <button class="btn btn-secondary" id="loginBtn" onclick="showPage('login')">
-                        <i class="fas fa-sign-in-alt"></i> Masuk
-                    </button>
-                    <button class="btn btn-primary" id="registerBtn" onclick="showPage('register')">
-                        <i class="fas fa-user-plus"></i> Daftar
-                    </button>
-                    <button class="btn btn-secondary hidden" id="logoutBtn" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Keluar
-                    </button>
-                </div>
+    <div class="container">
+        <!-- Header Partial -->
+        <header>
+            <div class="logo">HanQUIS</div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/dashboard">Kuis</a></li>
+                    <li><a href="#">Tentang</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button id="loginBtn">Login</button>
+                <button id="registerBtn">Register</button>
             </div>
-        </div>
-    </nav>
+        </header>
 
-    <!-- Landing Page -->
-    <div id="home" class="page active">
-        <div class="container">
-            <section class="hero">
-                <div class="hero-content">
-                    <h1>HanQUIS</h1>
-                    <p>Platform kuis interaktif modern dengan berbagai kategori menarik. Uji pengetahuan Anda dalam Agama Islam, Bahasa Indonesia, dan Psikologi dengan tampilan yang elegan dan profesional.</p>
-                    <button class="cta-button" onclick="showPage('register')">
-                        <i class="fas fa-rocket"></i>
-                        Mulai Sekarang
-                    </button>
+        <!-- Main Content -->
+        <main id="mainContent">
+            <!-- Landing Page -->
+            <section id="landingPage" class="hero">
+                <h1>Uji Pengetahuan Anda dengan HanQUIS</h1>
+                <p>Tantang diri Anda dengan berbagai kuis menarik dari berbagai kategori. Tingkatkan pengetahuan sambil bersenang-senang!</p>
+                <button class="start-btn" id="startBtn">Mulai Sekarang</button>
+            </section>
+
+            <!-- Login Form (Hidden by default) -->
+            <section id="loginForm" class="auth-container" style="display: none;">
+                <h2>Login ke HanQUIS</h2>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Login</button>
+                </form>
+                <div class="auth-footer">
+                    Belum punya akun? <a href="#" id="showRegister">Daftar disini</a>
                 </div>
             </section>
-        </div>
-    </div>
 
-    <!-- Register Page -->
-    <div id="register" class="page">
-        <div class="container">
-            <div class="auth-container">
-                <div class="auth-card">
-                    <h2>Daftar Akun</h2>
-                    <form id="registerForm">
-                        <div class="form-group">
-                            <label for="regName">Nama Lengkap</label>
-                            <input type="text" id="regName" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regEmail">Email</label>
-                            <input type="email" id="regEmail" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regPassword">Password</label>
-                            <input type="password" id="regPassword" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                            <i class="fas fa-user-plus"></i> Daftar
-                        </button>
-                    </form>
-                    <div style="text-align: center; margin-top: 20px; color: #b0b0b0;">
-                        Sudah punya akun? <a href="#" onclick="showPage('login')" style="color: #00d4ff;">Masuk di sini</a>
+            <!-- Register Form (Hidden by default) -->
+            <section id="registerForm" class="auth-container" style="display: none;">
+                <h2>Daftar Akun HanQUIS</h2>
+                <form id="registerFormElement">
+                    <div class="form-group">
+                        <label for="registerName">Nama Lengkap</label>
+                        <input type="text" id="registerName" required>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Page -->
-    <div id="login" class="page">
-        <div class="container">
-            <div class="auth-container">
-                <div class="auth-card">
-                    <h2>Masuk</h2>
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label for="loginEmail">Email</label>
-                            <input type="email" id="loginEmail" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Password</label>
-                            <input type="password" id="loginPassword" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                            <i class="fas fa-sign-in-alt"></i> Masuk
-                        </button>
-                    </form>
-                    <div style="text-align: center; margin-top: 20px; color: #b0b0b0;">
-                        Belum punya akun? <a href="#" onclick="showPage('register')" style="color: #00d4ff;">Daftar di sini</a>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
                     </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Konfirmasi Password</label>
+                        <input type="password" id="registerConfirmPassword" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Daftar</button>
+                </form>
+                <div class="auth-footer">
+                    Sudah punya akun? <a href="#" id="showLogin">Login disini</a>
                 </div>
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="page">
-        <div class="container">
-            <div class="dashboard">
+            <!-- Dashboard (Hidden by default) -->
+            <section id="dashboard" style="display: none;">
                 <div class="dashboard-header">
-                    <h1>Selamat Datang, <span id="userName">User</span>!</h1>
-                    <p style="color: #b0b0b0; font-size: 1.1rem;">Pilih kategori kuis yang ingin Anda ikuti</p>
+                    <h2 class="welcome-message">Halo, <span id="userName">Pengguna</span>!</h2>
+                    <p>Pilih kategori kuis yang ingin Anda kerjakan:</p>
                 </div>
-                
-                <div class="categories-grid">
-                    <div class="category-card" onclick="startQuiz('islam')">
-                        <div class="category-icon">
-                            <i class="fas fa-mosque"></i>
-                        </div>
+                <div class="category-cards">
+                    <div class="category-card" data-category="islam">
                         <h3>Agama Islam</h3>
-                        <p>Kuis seputar pengetahuan agama Islam, Al-Quran, hadits, dan sejarah Islam</p>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-play"></i> Mulai Kuis
-                        </button>
+                        <p>Uji pengetahuan Anda tentang agama Islam dengan 15 pertanyaan pilihan ganda.</p>
+                        <button class="start-quiz-btn" data-category="islam">Mulai Kuis</button>
                     </div>
-                    
-                    <div class="category-card" onclick="startQuiz('bahasa')">
-                        <div class="category-icon">
-                            <i class="fas fa-language"></i>
-                        </div>
+                    <div class="category-card" data-category="indonesia">
                         <h3>Bahasa Indonesia</h3>
-                        <p>Kuis tentang tata bahasa, sastra, dan pengetahuan bahasa Indonesia</p>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-play"></i> Mulai Kuis
-                        </button>
+                        <p>Tes kemampuan Bahasa Indonesia Anda dengan 12 pertanyaan menarik.</p>
+                        <button class="start-quiz-btn" data-category="indonesia">Mulai Kuis</button>
                     </div>
-                    
-                    <div class="category-card" onclick="startQuiz('psikologi')">
-                        <div class="category-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
+                    <div class="category-card" data-category="psikologi">
                         <h3>Psikologi</h3>
-                        <p>Kuis pengetahuan dasar psikologi, perilaku manusia, dan teori psikologi</p>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-play"></i> Mulai Kuis
-                        </button>
+                        <p>Jajaki dunia psikologi dengan 10 pertanyaan mendalam.</p>
+                        <button class="start-quiz-btn" data-category="psikologi">Mulai Kuis</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <!-- Quiz Page -->
-    <div id="quiz" class="page">
-        <div class="container">
-            <div class="quiz-container">
-                <div class="quiz-header">
-                    <div class="quiz-progress">
-                        <span>Soal <span id="currentQuestion">1</span> dari <span id="totalQuestions">15</span></span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
+            <!-- Quiz Page (Hidden by default) -->
+            <section id="quizPage" style="display: none;">
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <h2 id="quizCategory">Kuis Agama Islam</h2>
+                        <div class="quiz-info">
+                            <span id="currentQuestion">1/15</span>
+                            <span id="quizTimer">00:00</span>
                         </div>
                     </div>
-                    <div class="timer">
-                        <i class="fas fa-clock"></i>
-                        <span id="timeLeft">15:00</span>
+                    <div class="question-container">
+                        <div class="question-number">Pertanyaan <span id="questionNumber">1</span></div>
+                        <div class="question-text" id="questionText">Apa arti dari kata 'Islam' dalam bahasa Arab?</div>
+                        <div class="options-container" id="optionsContainer">
+                            <div class="option" data-option="1">Keselamatan</div>
+                            <div class="option" data-option="2">Penyerahan diri</div>
+                            <div class="option" data-option="3">Kepatuhan</div>
+                            <div class="option" data-option="4">Kebenaran</div>
+                        </div>
+                    </div>
+                    <div class="navigation-buttons">
+                        <button class="nav-btn" id="prevBtn" disabled>Sebelumnya</button>
+                        <button class="nav-btn" id="nextBtn">Selanjutnya</button>
                     </div>
                 </div>
-                
-                <div class="question-card">
-                    <div class="question-text" id="questionText">
-                        Loading question...
-                    </div>
-                    <div class="options" id="optionsContainer">
-                        <!-- Options will be generated here -->
-                    </div>
-                </div>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
-                        <i class="fas fa-arrow-right"></i> Selanjutnya
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <!-- Results Page -->
-    <div id="results" class="page">
-        <div class="container">
-            <div class="results-container">
-                <div class="score-display">
-                    <div class="score-circle">
-                        <div class="score-text" id="finalScore">0%</div>
+            <!-- Results Page (Hidden by default) -->
+            <section id="resultsPage" style="display: none;">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2>Hasil Kuis Anda</h2>
+                        <div class="score-display">
+                            <span id="finalScore">85</span>/100
+                        </div>
+                        <p id="resultMessage">Kerja bagus! Pengetahuan Anda tentang Agama Islam cukup baik.</p>
                     </div>
-                    <h2 style="margin-bottom: 20px;">Kuis Selesai!</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 30px 0;">
-                        <div>
-                            <div style="font-size: 2rem; font-weight: 700; color: #00d4ff;" id="correctAnswers">0</div>
-                            <div style="color: #b0b0b0;">Benar</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="correctAnswers">12</div>
+                            <div class="stat-label">Benar</div>
                         </div>
-                        <div>
-                            <div style="font-size: 2rem; font-weight: 700; color: #ff00ff;" id="wrongAnswers">0</div>
-                            <div style="color: #b0b0b0;">Salah</div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="wrongAnswers">3</div>
+                            <div class="stat-label">Salah</div>
                         </div>
-                        <div>
-                            <div style="font-size: 2rem; font-weight: 700; color: #ffd700;" id="timeTaken">0:00</div>
-                            <div style="color: #b0b0b0;">Waktu</div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="timeTaken">05:32</div>
+                            <div class="stat-label">Waktu</div>
                         </div>
+                    </div>
+                    <div class="review-section">
+                        <h3>Pembahasan Jawaban</h3>
+                        <div id="reviewQuestions">
+                            <!-- Review items will be added here dynamically -->
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <a href="/dashboard" class="action-btn">Kuis Lainnya</a>
+                        <a href="/" class="action-btn secondary-btn">Kembali ke Beranda</a>
                     </div>
                 </div>
-                
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <button class="btn btn-primary" onclick="showPage('dashboard')">
-                        <i class="fas fa-home"></i> Kembali ke Dashboard
-                    </button>
-                    <button class="btn btn-secondary" onclick="retakeQuiz()">
-                        <i class="fas fa-redo"></i> Ulangi Kuis
-                    </button>
-                </div>
-            </div>
-        </div>
+            </section>
+        </main>
     </div>
 
     <script>
-        // Global Variables
-        let users = JSON.parse(localStorage.getItem('hanquis_users') || '[]');
-        let currentUser = JSON.parse(localStorage.getItem('hanquis_current_user') || 'null');
-        let currentQuiz = null;
-        let currentQuestionIndex = 0;
-        let userAnswers = [];
-        let quizTimer = null;
-        let timeLeft = 900; // 15 minutes
-        let startTime = null;
-
-        // Quiz Database
-        const quizDatabase = {
+        // Simulated database
+        const users = [];
+        const quizzes = {
             islam: [
                 {
-                    question: "Berapa jumlah surat dalam Al-Quran?",
-                    options: ["114 surat", "115 surat", "113 surat", "116 surat"],
-                    correct: 0,
-                    explanation: "Al-Quran terdiri dari 114 surat, dimulai dari surat Al-Fatihah hingga An-Nas."
+                    question: "Apa arti dari kata 'Islam' dalam bahasa Arab?",
+                    options: ["Keselamatan", "Penyerahan diri", "Kepatuhan", "Kebenaran"],
+                    answer: 1,
+                    explanation: "Islam berasal dari kata 'aslama' yang berarti penyerahan diri kepada Allah."
                 },
                 {
-                    question: "Siapakah nabi terakhir dalam agama Islam?",
-                    options: ["Nabi Isa AS", "Nabi Musa AS", "Nabi Muhammad SAW", "Nabi Ibrahim AS"],
-                    correct: 2,
-                    explanation: "Nabi Muhammad SAW adalah nabi dan rasul terakhir yang diutus Allah SWT."
+                    question: "Berapa jumlah Rukun Islam?",
+                    options: ["3", "4", "5", "6"],
+                    answer: 2,
+                    explanation: "Rukun Islam ada 5: Syahadat, Shalat, Zakat, Puasa, dan Haji."
                 },
                 {
-                    question: "Rukun Islam yang pertama adalah?",
-                    options: ["Shalat", "Syahadat", "Zakat", "Puasa"],
-                    correct: 1,
-                    explanation: "Syahadat adalah rukun Islam yang pertama, yaitu bersaksi bahwa tidak ada Tuhan selain Allah dan Muhammad adalah utusan Allah."
+                    question: "Siapakah nama malaikat yang bertugas menyampaikan wahyu?",
+                    options: ["Mikail", "Israfil", "Jibril", "Izrail"],
+                    answer: 2,
+                    explanation: "Malaikat Jibril bertugas menyampaikan wahyu kepada para nabi dan rasul."
+                }
+            ],
+            indonesia: [
+                {
+                    question: "Apa yang dimaksud dengan 'diksi' dalam karya sastra?",
+                    options: ["Alur cerita", "Pemilihan kata", "Tema utama", "Latar belakang"],
+                    answer: 1,
+                    explanation: "Diksi adalah pemilihan kata yang tepat dan selaras dalam pengungkapan gagasan."
                 },
                 {
-                    question: "Berapa kali umat Islam wajib shalat dalam sehari?",
-                    options: ["3 kali", "4 kali", "5 kali", "6 kali"],
-                    correct: 2,
-                    explanation: "Umat Islam wajib melaksanakan shalat 5 waktu dalam sehari: Subuh, Dzuhur, Ashar, Maghrib, dan Isya."
+                    question: "Manakah yang termasuk kalimat efektif?",
+                    options: [
+                        "Dia pergi ke sekolah dengan berjalan kaki dengan menggunakan sepatu baru",
+                        "Dia berjalan kaki ke sekolah memakai sepatu baru",
+                        "Dia pergi ke sekolah jalan kaki pakai sepatu baru",
+                        "Dia pergi ke sekolah dengan berjalan kaki pakai sepatu baru"
+                    ],
+                    answer: 1,
+                    explanation: "Kalimat efektif harus jelas, logis, dan tidak bertele-tele."
+                }
+            ],
+            psikologi: [
+                {
+                    question: "Apa yang dimaksud dengan 'efek halo' dalam psikologi sosial?",
+                    options: [
+                        "Kecenderungan mengingat hal pertama dalam daftar",
+                        "Persepsi positif menyeluruh berdasarkan satu sifat baik",
+                        "Kesalahan atribusi karena pengaruh lingkungan",
+                        "Penilaian berdasarkan kesan terakhir"
+                    ],
+                    answer: 1,
+                    explanation: "Efek halo adalah kecenderungan menilai seseorang secara positif menyeluruh berdasarkan satu sifat baik yang dimilikinya."
                 },
                 {
-                    question: "Bulan puasa Ramadan merupakan bulan ke berapa dalam kalender Hijriah?",
-                    options: ["8", "9", "10", "11"],
-                    correct: 1,
-                    explanation: "Ramadan adalah bulan ke-9 dalam kalender Hijriah, bulan di mana umat Islam menjalankan ibadah puasa."
-                },
-                {
-                    question: "Masjidil Haram terletak di kota?",
-                    options: ["Madinah", "Makkah", "Yerusalem", "Baghdad"],
-                    correct: 1,
-                    explanation: "Masjidil Haram terletak di kota Makkah, Arab Saudi, dan merupakan kiblat umat Islam di seluruh dunia."
-                },
-                {
-                    question: "Nama lain dari Nabi Ibrahim AS adalah?",
-                    options: ["Abraham", "Isaac", "Jacob", "Moses"],
-                    correct: 0,
-                    explanation: "Nabi Ibrahim AS dalam tradisi Kristen dan Yahudi dikenal dengan nama Abraham."
-                },
-                {
-                    question: "Surat pertama yang diturunkan kepada Nabi Muhammad SAW adalah?",
-                    options: ["Al-Fatihah", "Al-Ikhlas", "Al-Alaq", "An-Nas"],
-                    correct: 2,
-                    explanation: "Surat Al-Alaq ayat 1-5 adalah wahyu pertama yang diturunkan kepada Nabi Muhammad SAW di Gua Hira."
-                },
-                {
-                    question: "Zakat fitrah wajib dibayarkan pada bulan?",
-                    options: ["Syawal", "Ramadan", "Dzulhijjah", "Muharram"],
-                    correct: 1,
-                    explanation: "Zakat fitrah wajib dibayarkan selama bulan Ramadan dan paling lambat sebelum shalat Ied."
-                },
-                {
-                    question: "Nama kitab suci agama Islam adalah?",
-                    options: ["Taurat", "Injil", "Al-Quran", "Zabur"],
-                    correct: 2,
-                    explanation: "Al-Quran adalah kitab suci umat Islam yang diturunkan kepada Nabi Muhammad SAW melalui malaikat Jibril."
-                },
-                {
-                    question: "Berapa jumlah malaikat yang wajib diimani
+                    question: "Teori hierarki kebutuhan dikemukakan oleh:",
+                    options: ["Freud", "Maslow", "Skinner", "Piaget"],
+                    answer: 1,
+                    explanation: "Abraham Maslow mengemukakan teori hierarki kebutuhan manusia yang berbentuk piramida."
+                }
+            ]
+        };
+
+        // Current user state
+        let currentUser = null;
+        let currentQuiz = null;
+        let userAnswers = [];
+        let currentQuestionIndex = 0;
+        let quizStartTime = null;
+        let timerInterval = null;
+
+        // DOM Elements
+        const mainContent = document.getElementById('mainContent');
+        const landingPage = document.getElementById('landingPage');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const dashboard = document.getElementById('dashboard');
+        const quizPage = document.getElementById('quizPage');
+        const resultsPage = document.getElementById('resultsPage');
+
+        // Auth buttons
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            showSection(loginForm);
+        });
+
+        document.getElementById('registerBtn').addEventListener('click', () => {
+            showSection(registerForm);
+        });
+
+        document.getElementById('showRegister').addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection(registerForm);
+        });
+
+        document.getElementById('showLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection(loginForm);
+        });
+
+        // Start button
+        document.getElementById('startBtn').addEventListener('click', () => {
+            if (currentUser) {
+                showSection(dashboard);
+            } else {
+                showSection(loginForm);
+            }
+        });
+
+        // Login form
+        document.getElementById('loginFormElement').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simulate login
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                document.getElementById('userName').textContent = user.name;
+                showSection(dashboard);
+            } else {
+                alert('Email atau password salah!');
+            }
+        });
+
+        // Register form
+        document.getElementById('registerFormElement').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Password dan konfirmasi password tidak sama!');
+                return;
+            }
+
+            // Check if user already exists
+            if (users.some(u => u.email === email)) {
+                alert('Email sudah terdaftar!');
+                return;
+            }
+
+            // Register new user
+            const newUser = {
+                id: Date.now().toString(),
+                name,
+                email,
+                password
+            };
+            users.push(newUser);
+            currentUser = newUser;
+            document.getElementById('userName').textContent = newUser.name;
+            showSection(dashboard);
+        });
+
+        // Quiz category selection
+        document.querySelectorAll('.start-quiz-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const category = e.target.dataset.category;
+                startQuiz(category);
+            });
+        });
+
+        // Quiz navigation
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                finishQuiz();
+            }
+        });
+
+        // Helper function to show sections
+        function showSection(section) {
+            [landingPage, loginForm, registerForm, dashboard, quizPage, resultsPage].forEach(sec => {
+                sec.style.display = 'none';
+            });
+            section.style.display = 'block';
+            section.classList.add('fade-in');
+        }
+
+        // Start quiz function
+        function startQuiz(category) {
+            currentQuiz = {
+                category,
+                questions: [...quizzes[category]]
+            };
+            
+            // Shuffle questions and take first 10
+            currentQuiz.questions = shuffleArray(currentQuiz.questions).slice(0, 10);
+            userAnswers = new Array(currentQuiz.questions.length).fill(null);
+            currentQuestionIndex = 0;
+            quizStartTime = new Date();
+            
+            // Start timer
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+            
+            // Set category title
+            let categoryName = '';
+            switch(category) {
+                case 'islam': categoryName = 'Agama Islam'; break;
+                case 'indonesia': categoryName = 'Bahasa Indonesia'; break;
+                case 'psikologi': categoryName = 'Psikologi'; break;
+            }
+            document.getElementById('quizCategory').textContent = `Kuis ${categoryName}`;
+            
+            showQuestion();
+            showSection(quizPage);
+        }
+
+        // Show current question
+        function showQuestion() {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            document.getElementById('questionNumber').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.dataset.option = index;
+                optionElement.textContent = option;
+                
+                // Mark selected answer
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.addEventListener('click', () => {
+                    // Deselect all options
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Select clicked option
+                    optionElement.classList.add('selected');
+                    userAnswers[currentQuestionIndex] = index;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update question counter
+            document.getElementById('currentQuestion').textContent = 
+                `${currentQuestionIndex + 1}/${currentQuiz.questions.length}`;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').textContent = 
+                currentQuestionIndex === currentQuiz.questions.length - 1 ? 'Selesai' : 'Selanjutnya';
+        }
+
+        // Finish quiz and show results
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            
+            // Calculate score
+            let correctCount = 0;
+            currentQuiz.questions.forEach((question, index) => {
+                if (userAnswers[index] === question.answer) {
+                    correctCount++;
+                }
+            });
+            
+            const score = Math.round((correctCount / currentQuiz.questions.length) * 100);
+            const timeTaken = Math.floor((new Date() - quizStartTime) / 1000);
+            const minutes = Math.floor(timeTaken / 60).toString().padStart(2, '0');
+            const seconds = (timeTaken % 60).toString().padStart(2, '0');
+            
+            // Display results
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('correctAnswers').textContent = correctCount;
+            document.getElementById('wrongAnswers').textContent = currentQuiz.questions.length - correctCount;
+            document.getElementById('timeTaken').textContent = `${minutes}:${seconds}`;
+            
+            // Set result message
+            let message = '';
+            if (score >= 80) {
+                message = 'Luar biasa! Pengetahuan Anda sangat baik.';
+            } else if (score >= 60) {
+                message = 'Bagus! Pengetahuan Anda cukup baik.';
+            } else if (score >= 40) {
+                message = 'Cukup baik. Masih ada ruang untuk peningkatan.';
+            } else {
+                message = 'Anda perlu belajar lebih giat lagi.';
+            }
+            document.getElementById('resultMessage').textContent = message;
+            
+            // Show review questions
+            const reviewContainer = document.getElementById('reviewQuestions');
+            reviewContainer.innerHTML = '';
+            
+            currentQuiz.questions.forEach((question, index) => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                
+                const questionText = document.createElement('div');
+                questionText.className = 'review-question';
+                questionText.textContent = `${index + 1}. ${question.question}`;
+                reviewItem.appendChild(questionText);
+                
+                const userAnswer = document.createElement('div');
+                userAnswer.className = 'user-answer';
+                if (userAnswers[index] !== null) {
+                    const isCorrect = userAnswers[index] === question.answer;
+                    userAnswer.classList.add(isCorrect ? 'correct' : 'wrong');
+                    userAnswer.textContent = `Jawaban Anda: ${question.options[userAnswers[index]]}`;
+                    reviewItem.appendChild(userAnswer);
+                } else {
+                    userAnswer.textContent = 'Anda tidak menjawab pertanyaan ini';
+                    reviewItem.appendChild(userAnswer);
+                }
+                
+                if (userAnswers[index] !== question.answer) {
+                    const correctAnswer = document.createElement('div');
+                    correctAnswer.className = 'correct-answer';
+                    correctAnswer.textContent = `Jawaban benar: ${question.options[question.answer]}`;
+                    reviewItem.appendChild(correctAnswer);
+                }
+                
+                const explanation = document.createElement('div');
+                explanation.className = 'explanation';
+                explanation.textContent = question.explanation;
+                reviewItem.appendChild(explanation);
+                
+                reviewContainer.appendChild(reviewItem);
+            });
+            
+            showSection(resultsPage);
+        }
+
+        // Update timer
+        function updateTimer() {
+            if (!quizStartTime) return;
+            
+            const now = new Date();
+            const elapsed = Math.floor((now - quizStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            
+            document.getElementById('quizTimer').textContent = `${minutes}:${seconds}`;
+        }
+
+        // Helper function to shuffle array
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Initialize with landing page
+        showSection(landingPage);
+    </script>
+</body>
+</html>
