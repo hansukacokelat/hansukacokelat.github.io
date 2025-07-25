@@ -1,1025 +1,187 @@
+<!-- HanQUIS: Satu File HTML (Versi All-in-One dengan Backend Simulasi via JS untuk Demo) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HanQUIS - Kuis Interaktif</title>
-    <style>
-        :root {
-            --primary-bg: #121212;
-            --secondary-bg: #1e1e1e;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --accent-color: #4a6fa5;
-            --correct-color: #4caf50;
-            --wrong-color: #f44336;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--primary-bg);
-            color: var(--text-primary);
-            min-height: 100vh;
-            transition: background-color 0.3s ease;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--secondary-bg);
-            margin-bottom: 2rem;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin-left: 1.5rem;
-        }
-
-        nav ul li a {
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        nav ul li a:hover {
-            color: var(--accent-color);
-        }
-
-        .auth-buttons button {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .auth-buttons button:hover {
-            background-color: #3a5a80;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-
-        .start-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .start-btn:hover {
-            background-color: #3a5a80;
-            transform: translateY(-2px);
-        }
-
-        /* Auth Forms */
-        .auth-container {
-            max-width: 400px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .auth-container h2 {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: var(--primary-bg);
-            border: 1px solid #333;
-            border-radius: 4px;
-            color: var(--text-primary);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            background-color: #3a5a80;
-        }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        .auth-footer a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        /* Dashboard */
-        .dashboard-header {
-            margin-bottom: 2rem;
-        }
-
-        .welcome-message {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .category-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .category-card {
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .category-card h3 {
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-        }
-
-        .category-card p {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .start-quiz-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .start-quiz-btn:hover {
-            background-color: #3a5a80;
-        }
-
-        /* Quiz Page */
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .quiz-info {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .quiz-info span {
-            background-color: var(--secondary-bg);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .question-container {
-            background-color: var(--secondary-bg);
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-
-        .question-number {
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .question-text {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .options-container {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .option {
-            background-color: var(--primary-bg);
-            padding: 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            border: 1px solid #333;
-        }
-
-        .option:hover {
-            background-color: #252525;
-        }
-
-        .option.selected {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-
-        .option.correct {
-            background-color: var(--correct-color);
-            border-color: var(--correct-color);
-        }
-
-        .option.wrong {
-            background-color: var(--wrong-color);
-            border-color: var(--wrong-color);
-        }
-
-        .navigation-buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .nav-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            background-color: #3a5a80;
-        }
-
-        .nav-btn:disabled {
-            background-color: #333;
-            cursor: not-allowed;
-        }
-
-        /* Results Page */
-        .results-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: var(--secondary-bg);
-            padding: 2rem;
-            border-radius: 8px;
-        }
-
-        .results-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .results-header h2 {
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        .score-display {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .review-section h3 {
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-        }
-
-        .review-item {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #333;
-        }
-
-        .review-question {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .user-answer.correct {
-            color: var(--correct-color);
-        }
-
-        .user-answer.wrong {
-            color: var(--wrong-color);
-        }
-
-        .correct-answer {
-            color: var(--correct-color);
-            font-weight: bold;
-        }
-
-        .explanation {
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
-
-        .action-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .action-btn:hover {
-            background-color: #3a5a80;
-        }
-
-        .secondary-btn {
-            background-color: #333;
-        }
-
-        .secondary-btn:hover {
-            background-color: #444;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav ul {
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .category-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HanQUIS</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background-color: #0f0f0f; color: white; }
+    .center { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+    .card {
+      background: #1a1a1a; border-radius: 12px; padding: 30px; width: 90%; max-width: 500px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.05); transition: 0.3s;
+    }
+    h1, h2, h3 { text-align: center; margin-bottom: 20px; }
+    input, button, select {
+      width: 100%; padding: 10px; margin: 10px 0; border: none;
+      border-radius: 6px; font-size: 16px;
+    }
+    button { background-color: #ffffff10; color: white; cursor: pointer; transition: 0.3s; }
+    button:hover { background-color: #ffffff25; }
+    .hidden { display: none; }
+    .quiz-option { margin: 5px 0; background: #2a2a2a; padding: 8px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+    .quiz-option:hover { background: #444; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header Partial -->
-        <header>
-            <div class="logo">HanQUIS</div>
-            <nav>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/dashboard">Kuis</a></li>
-                    <li><a href="#">Tentang</a></li>
-                </ul>
-            </nav>
-            <div class="auth-buttons">
-                <button id="loginBtn">Login</button>
-                <button id="registerBtn">Register</button>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main id="mainContent">
-            <!-- Landing Page -->
-            <section id="landingPage" class="hero">
-                <h1>Uji Pengetahuan Anda dengan HanQUIS</h1>
-                <p>Tantang diri Anda dengan berbagai kuis menarik dari berbagai kategori. Tingkatkan pengetahuan sambil bersenang-senang!</p>
-                <button class="start-btn" id="startBtn">Mulai Sekarang</button>
-            </section>
-
-            <!-- Login Form (Hidden by default) -->
-            <section id="loginForm" class="auth-container" style="display: none;">
-                <h2>Login ke HanQUIS</h2>
-                <form id="loginFormElement">
-                    <div class="form-group">
-                        <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" required>
-                    </div>
-                    <button type="submit" class="submit-btn">Login</button>
-                </form>
-                <div class="auth-footer">
-                    Belum punya akun? <a href="#" id="showRegister">Daftar disini</a>
-                </div>
-            </section>
-
-            <!-- Register Form (Hidden by default) -->
-            <section id="registerForm" class="auth-container" style="display: none;">
-                <h2>Daftar Akun HanQUIS</h2>
-                <form id="registerFormElement">
-                    <div class="form-group">
-                        <label for="registerName">Nama Lengkap</label>
-                        <input type="text" id="registerName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="registerEmail">Email</label>
-                        <input type="email" id="registerEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="registerPassword">Password</label>
-                        <input type="password" id="registerPassword" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="registerConfirmPassword">Konfirmasi Password</label>
-                        <input type="password" id="registerConfirmPassword" required>
-                    </div>
-                    <button type="submit" class="submit-btn">Daftar</button>
-                </form>
-                <div class="auth-footer">
-                    Sudah punya akun? <a href="#" id="showLogin">Login disini</a>
-                </div>
-            </section>
-
-            <!-- Dashboard (Hidden by default) -->
-            <section id="dashboard" style="display: none;">
-                <div class="dashboard-header">
-                    <h2 class="welcome-message">Halo, <span id="userName">Pengguna</span>!</h2>
-                    <p>Pilih kategori kuis yang ingin Anda kerjakan:</p>
-                </div>
-                <div class="category-cards">
-                    <div class="category-card" data-category="islam">
-                        <h3>Agama Islam</h3>
-                        <p>Uji pengetahuan Anda tentang agama Islam dengan 15 pertanyaan pilihan ganda.</p>
-                        <button class="start-quiz-btn" data-category="islam">Mulai Kuis</button>
-                    </div>
-                    <div class="category-card" data-category="indonesia">
-                        <h3>Bahasa Indonesia</h3>
-                        <p>Tes kemampuan Bahasa Indonesia Anda dengan 12 pertanyaan menarik.</p>
-                        <button class="start-quiz-btn" data-category="indonesia">Mulai Kuis</button>
-                    </div>
-                    <div class="category-card" data-category="psikologi">
-                        <h3>Psikologi</h3>
-                        <p>Jajaki dunia psikologi dengan 10 pertanyaan mendalam.</p>
-                        <button class="start-quiz-btn" data-category="psikologi">Mulai Kuis</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quiz Page (Hidden by default) -->
-            <section id="quizPage" style="display: none;">
-                <div class="quiz-container">
-                    <div class="quiz-header">
-                        <h2 id="quizCategory">Kuis Agama Islam</h2>
-                        <div class="quiz-info">
-                            <span id="currentQuestion">1/15</span>
-                            <span id="quizTimer">00:00</span>
-                        </div>
-                    </div>
-                    <div class="question-container">
-                        <div class="question-number">Pertanyaan <span id="questionNumber">1</span></div>
-                        <div class="question-text" id="questionText">Apa arti dari kata 'Islam' dalam bahasa Arab?</div>
-                        <div class="options-container" id="optionsContainer">
-                            <div class="option" data-option="1">Keselamatan</div>
-                            <div class="option" data-option="2">Penyerahan diri</div>
-                            <div class="option" data-option="3">Kepatuhan</div>
-                            <div class="option" data-option="4">Kebenaran</div>
-                        </div>
-                    </div>
-                    <div class="navigation-buttons">
-                        <button class="nav-btn" id="prevBtn" disabled>Sebelumnya</button>
-                        <button class="nav-btn" id="nextBtn">Selanjutnya</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Results Page (Hidden by default) -->
-            <section id="resultsPage" style="display: none;">
-                <div class="results-container">
-                    <div class="results-header">
-                        <h2>Hasil Kuis Anda</h2>
-                        <div class="score-display">
-                            <span id="finalScore">85</span>/100
-                        </div>
-                        <p id="resultMessage">Kerja bagus! Pengetahuan Anda tentang Agama Islam cukup baik.</p>
-                    </div>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="correctAnswers">12</div>
-                            <div class="stat-label">Benar</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="wrongAnswers">3</div>
-                            <div class="stat-label">Salah</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="timeTaken">05:32</div>
-                            <div class="stat-label">Waktu</div>
-                        </div>
-                    </div>
-                    <div class="review-section">
-                        <h3>Pembahasan Jawaban</h3>
-                        <div id="reviewQuestions">
-                            <!-- Review items will be added here dynamically -->
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <a href="/dashboard" class="action-btn">Kuis Lainnya</a>
-                        <a href="/" class="action-btn secondary-btn">Kembali ke Beranda</a>
-                    </div>
-                </div>
-            </section>
-        </main>
+  <div id="app" class="center">
+    <div id="landing" class="card">
+      <h1>🧠 HanQUIS</h1>
+      <p>Platform Kuis Edukasi: Islam, Bahasa Indonesia, Psikologi</p>
+      <button onclick="showLogin()">Mulai</button>
     </div>
 
-    <script>
-        // Simulated database
-        const users = [];
-        const quizzes = {
-            islam: [
-                {
-                    question: "Apa arti dari kata 'Islam' dalam bahasa Arab?",
-                    options: ["Keselamatan", "Penyerahan diri", "Kepatuhan", "Kebenaran"],
-                    answer: 1,
-                    explanation: "Islam berasal dari kata 'aslama' yang berarti penyerahan diri kepada Allah."
-                },
-                {
-                    question: "Berapa jumlah Rukun Islam?",
-                    options: ["3", "4", "5", "6"],
-                    answer: 2,
-                    explanation: "Rukun Islam ada 5: Syahadat, Shalat, Zakat, Puasa, dan Haji."
-                },
-                {
-                    question: "Siapakah nama malaikat yang bertugas menyampaikan wahyu?",
-                    options: ["Mikail", "Israfil", "Jibril", "Izrail"],
-                    answer: 2,
-                    explanation: "Malaikat Jibril bertugas menyampaikan wahyu kepada para nabi dan rasul."
-                }
-            ],
-            indonesia: [
-                {
-                    question: "Apa yang dimaksud dengan 'diksi' dalam karya sastra?",
-                    options: ["Alur cerita", "Pemilihan kata", "Tema utama", "Latar belakang"],
-                    answer: 1,
-                    explanation: "Diksi adalah pemilihan kata yang tepat dan selaras dalam pengungkapan gagasan."
-                },
-                {
-                    question: "Manakah yang termasuk kalimat efektif?",
-                    options: [
-                        "Dia pergi ke sekolah dengan berjalan kaki dengan menggunakan sepatu baru",
-                        "Dia berjalan kaki ke sekolah memakai sepatu baru",
-                        "Dia pergi ke sekolah jalan kaki pakai sepatu baru",
-                        "Dia pergi ke sekolah dengan berjalan kaki pakai sepatu baru"
-                    ],
-                    answer: 1,
-                    explanation: "Kalimat efektif harus jelas, logis, dan tidak bertele-tele."
-                }
-            ],
-            psikologi: [
-                {
-                    question: "Apa yang dimaksud dengan 'efek halo' dalam psikologi sosial?",
-                    options: [
-                        "Kecenderungan mengingat hal pertama dalam daftar",
-                        "Persepsi positif menyeluruh berdasarkan satu sifat baik",
-                        "Kesalahan atribusi karena pengaruh lingkungan",
-                        "Penilaian berdasarkan kesan terakhir"
-                    ],
-                    answer: 1,
-                    explanation: "Efek halo adalah kecenderungan menilai seseorang secara positif menyeluruh berdasarkan satu sifat baik yang dimilikinya."
-                },
-                {
-                    question: "Teori hierarki kebutuhan dikemukakan oleh:",
-                    options: ["Freud", "Maslow", "Skinner", "Piaget"],
-                    answer: 1,
-                    explanation: "Abraham Maslow mengemukakan teori hierarki kebutuhan manusia yang berbentuk piramida."
-                }
-            ]
+    <div id="loginPage" class="card hidden">
+      <h2>Login</h2>
+      <input type="text" id="loginUser" placeholder="Username">
+      <input type="password" id="loginPass" placeholder="Password">
+      <button onclick="login()">Masuk</button>
+      <p style="text-align:center">atau</p>
+      <button onclick="showRegister()">Daftar Baru</button>
+    </div>
+
+    <div id="registerPage" class="card hidden">
+      <h2>Register</h2>
+      <input type="text" id="regUser" placeholder="Username">
+      <input type="password" id="regPass" placeholder="Password">
+      <button onclick="register()">Daftar</button>
+    </div>
+
+    <div id="dashboard" class="card hidden">
+      <h2>Halo, <span id="username"></span></h2>
+      <h3>Pilih Kategori Kuis:</h3>
+      <select id="quizCategory">
+        <option value="islam">Agama Islam</option>
+        <option value="indonesia">Bahasa Indonesia</option>
+        <option value="psikologi">Psikologi</option>
+      </select>
+      <button onclick="startQuiz()">Mulai Kuis</button>
+    </div>
+
+    <div id="quizPage" class="card hidden">
+      <h2 id="questionTitle"></h2>
+      <div id="options"></div>
+      <button onclick="nextQuestion()">Lanjut</button>
+    </div>
+
+    <div id="resultPage" class="card hidden">
+      <h2>Hasil Kuis</h2>
+      <p>Skor Akhir: <span id="finalScore"></span>/10</p>
+      <p>Waktu Pengerjaan: <span id="quizTime"></span> detik</p>
+      <p>Pembahasan Singkat: Fokus, belajar dari kesalahan, dan coba lagi! 💪</p>
+      <button onclick="showDashboard()">Kembali ke Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    let users = {};
+    let currentUser = "";
+    let currentQuiz = [];
+    let currentIndex = 0;
+    let score = 0;
+    let startTime = 0;
+
+    const quizDB = {
+      islam: [
+        { q: "Apa rukun Islam pertama?", o: ["Zakat", "Syahadat", "Haji", "Salat"], a: 1 },
+        { q: "Bulan puasa adalah?", o: ["Syawal", "Rajab", "Ramadhan", "Dzulhijjah"], a: 2 }
+      ],
+      indonesia: [
+        { q: "Antonim kata 'besar'?", o: ["Raksasa", "Kecil", "Tinggi", "Panjang"], a: 1 },
+        { q: "Kalimat efektif adalah?", o: ["Yang mana pergi ke pasar adalah ibu saya", "Saya ke pasar tadi pagi"], a: 1 }
+      ],
+      psikologi: [
+        { q: "Psikologi adalah ilmu yang mempelajari?", o: ["Angka", "Perasaan", "Perilaku manusia", "Benda mati"], a: 2 },
+        { q: "Orang yang suka menyendiri disebut?", o: ["Introvert", "Extrovert", "Ambivert", "Sosiopat"], a: 0 }
+      ]
+    };
+
+    function showLogin() {
+      togglePages('loginPage');
+    }
+
+    function showRegister() {
+      togglePages('registerPage');
+    }
+
+    function showDashboard() {
+      togglePages('dashboard');
+    }
+
+    function togglePages(showId) {
+      const pages = ['landing', 'loginPage', 'registerPage', 'dashboard', 'quizPage', 'resultPage'];
+      pages.forEach(id => document.getElementById(id).classList.add('hidden'));
+      document.getElementById(showId).classList.remove('hidden');
+    }
+
+    function register() {
+      const user = document.getElementById('regUser').value;
+      const pass = document.getElementById('regPass').value;
+      if (user && pass && !users[user]) {
+        users[user] = pass;
+        alert('Registrasi berhasil! Silakan login.');
+        showLogin();
+      } else {
+        alert('Registrasi gagal. Username sudah digunakan.');
+      }
+    }
+
+    function login() {
+      const user = document.getElementById('loginUser').value;
+      const pass = document.getElementById('loginPass').value;
+      if (users[user] === pass) {
+        currentUser = user;
+        document.getElementById('username').innerText = user;
+        showDashboard();
+      } else {
+        alert('Login gagal. Periksa username dan password.');
+      }
+    }
+
+    function startQuiz() {
+      const cat = document.getElementById('quizCategory').value;
+      currentQuiz = shuffleArray(quizDB[cat]).slice(0, 10);
+      currentIndex = 0;
+      score = 0;
+      startTime = Date.now();
+      renderQuestion();
+      togglePages('quizPage');
+    }
+
+    function renderQuestion() {
+      const q = currentQuiz[currentIndex];
+      document.getElementById('questionTitle').innerText = `Soal ${currentIndex + 1}: ${q.q}`;
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      q.o.forEach((opt, i) => {
+        const div = document.createElement('div');
+        div.className = 'quiz-option';
+        div.innerText = opt;
+        div.onclick = () => {
+          if (i === q.a) score++;
+          nextQuestion();
         };
+        optionsDiv.appendChild(div);
+      });
+    }
 
-        // Current user state
-        let currentUser = null;
-        let currentQuiz = null;
-        let userAnswers = [];
-        let currentQuestionIndex = 0;
-        let quizStartTime = null;
-        let timerInterval = null;
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex >= currentQuiz.length) {
+        const endTime = Date.now();
+        document.getElementById('finalScore').innerText = score;
+        document.getElementById('quizTime').innerText = Math.floor((endTime - startTime)/1000);
+        togglePages('resultPage');
+      } else {
+        renderQuestion();
+      }
+    }
 
-        // DOM Elements
-        const mainContent = document.getElementById('mainContent');
-        const landingPage = document.getElementById('landingPage');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const dashboard = document.getElementById('dashboard');
-        const quizPage = document.getElementById('quizPage');
-        const resultsPage = document.getElementById('resultsPage');
-
-        // Auth buttons
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            showSection(loginForm);
-        });
-
-        document.getElementById('registerBtn').addEventListener('click', () => {
-            showSection(registerForm);
-        });
-
-        document.getElementById('showRegister').addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection(registerForm);
-        });
-
-        document.getElementById('showLogin').addEventListener('click', (e) => {
-            e.preventDefault();
-            showSection(loginForm);
-        });
-
-        // Start button
-        document.getElementById('startBtn').addEventListener('click', () => {
-            if (currentUser) {
-                showSection(dashboard);
-            } else {
-                showSection(loginForm);
-            }
-        });
-
-        // Login form
-        document.getElementById('loginFormElement').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            // Simulate login
-            const user = users.find(u => u.email === email && u.password === password);
-            if (user) {
-                currentUser = user;
-                document.getElementById('userName').textContent = user.name;
-                showSection(dashboard);
-            } else {
-                alert('Email atau password salah!');
-            }
-        });
-
-        // Register form
-        document.getElementById('registerFormElement').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-
-            if (password !== confirmPassword) {
-                alert('Password dan konfirmasi password tidak sama!');
-                return;
-            }
-
-            // Check if user already exists
-            if (users.some(u => u.email === email)) {
-                alert('Email sudah terdaftar!');
-                return;
-            }
-
-            // Register new user
-            const newUser = {
-                id: Date.now().toString(),
-                name,
-                email,
-                password
-            };
-            users.push(newUser);
-            currentUser = newUser;
-            document.getElementById('userName').textContent = newUser.name;
-            showSection(dashboard);
-        });
-
-        // Quiz category selection
-        document.querySelectorAll('.start-quiz-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const category = e.target.dataset.category;
-                startQuiz(category);
-            });
-        });
-
-        // Quiz navigation
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showQuestion();
-            }
-        });
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
-                currentQuestionIndex++;
-                showQuestion();
-            } else {
-                finishQuiz();
-            }
-        });
-
-        // Helper function to show sections
-        function showSection(section) {
-            [landingPage, loginForm, registerForm, dashboard, quizPage, resultsPage].forEach(sec => {
-                sec.style.display = 'none';
-            });
-            section.style.display = 'block';
-            section.classList.add('fade-in');
-        }
-
-        // Start quiz function
-        function startQuiz(category) {
-            currentQuiz = {
-                category,
-                questions: [...quizzes[category]]
-            };
-            
-            // Shuffle questions and take first 10
-            currentQuiz.questions = shuffleArray(currentQuiz.questions).slice(0, 10);
-            userAnswers = new Array(currentQuiz.questions.length).fill(null);
-            currentQuestionIndex = 0;
-            quizStartTime = new Date();
-            
-            // Start timer
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(updateTimer, 1000);
-            updateTimer();
-            
-            // Set category title
-            let categoryName = '';
-            switch(category) {
-                case 'islam': categoryName = 'Agama Islam'; break;
-                case 'indonesia': categoryName = 'Bahasa Indonesia'; break;
-                case 'psikologi': categoryName = 'Psikologi'; break;
-            }
-            document.getElementById('quizCategory').textContent = `Kuis ${categoryName}`;
-            
-            showQuestion();
-            showSection(quizPage);
-        }
-
-        // Show current question
-        function showQuestion() {
-            const question = currentQuiz.questions[currentQuestionIndex];
-            document.getElementById('questionNumber').textContent = currentQuestionIndex + 1;
-            document.getElementById('questionText').textContent = question.question;
-            
-            const optionsContainer = document.getElementById('optionsContainer');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                optionElement.dataset.option = index;
-                optionElement.textContent = option;
-                
-                // Mark selected answer
-                if (userAnswers[currentQuestionIndex] === index) {
-                    optionElement.classList.add('selected');
-                }
-                
-                optionElement.addEventListener('click', () => {
-                    // Deselect all options
-                    document.querySelectorAll('.option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    
-                    // Select clicked option
-                    optionElement.classList.add('selected');
-                    userAnswers[currentQuestionIndex] = index;
-                });
-                
-                optionsContainer.appendChild(optionElement);
-            });
-            
-            // Update question counter
-            document.getElementById('currentQuestion').textContent = 
-                `${currentQuestionIndex + 1}/${currentQuiz.questions.length}`;
-            
-            // Update navigation buttons
-            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
-            document.getElementById('nextBtn').textContent = 
-                currentQuestionIndex === currentQuiz.questions.length - 1 ? 'Selesai' : 'Selanjutnya';
-        }
-
-        // Finish quiz and show results
-        function finishQuiz() {
-            clearInterval(timerInterval);
-            
-            // Calculate score
-            let correctCount = 0;
-            currentQuiz.questions.forEach((question, index) => {
-                if (userAnswers[index] === question.answer) {
-                    correctCount++;
-                }
-            });
-            
-            const score = Math.round((correctCount / currentQuiz.questions.length) * 100);
-            const timeTaken = Math.floor((new Date() - quizStartTime) / 1000);
-            const minutes = Math.floor(timeTaken / 60).toString().padStart(2, '0');
-            const seconds = (timeTaken % 60).toString().padStart(2, '0');
-            
-            // Display results
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('correctAnswers').textContent = correctCount;
-            document.getElementById('wrongAnswers').textContent = currentQuiz.questions.length - correctCount;
-            document.getElementById('timeTaken').textContent = `${minutes}:${seconds}`;
-            
-            // Set result message
-            let message = '';
-            if (score >= 80) {
-                message = 'Luar biasa! Pengetahuan Anda sangat baik.';
-            } else if (score >= 60) {
-                message = 'Bagus! Pengetahuan Anda cukup baik.';
-            } else if (score >= 40) {
-                message = 'Cukup baik. Masih ada ruang untuk peningkatan.';
-            } else {
-                message = 'Anda perlu belajar lebih giat lagi.';
-            }
-            document.getElementById('resultMessage').textContent = message;
-            
-            // Show review questions
-            const reviewContainer = document.getElementById('reviewQuestions');
-            reviewContainer.innerHTML = '';
-            
-            currentQuiz.questions.forEach((question, index) => {
-                const reviewItem = document.createElement('div');
-                reviewItem.className = 'review-item';
-                
-                const questionText = document.createElement('div');
-                questionText.className = 'review-question';
-                questionText.textContent = `${index + 1}. ${question.question}`;
-                reviewItem.appendChild(questionText);
-                
-                const userAnswer = document.createElement('div');
-                userAnswer.className = 'user-answer';
-                if (userAnswers[index] !== null) {
-                    const isCorrect = userAnswers[index] === question.answer;
-                    userAnswer.classList.add(isCorrect ? 'correct' : 'wrong');
-                    userAnswer.textContent = `Jawaban Anda: ${question.options[userAnswers[index]]}`;
-                    reviewItem.appendChild(userAnswer);
-                } else {
-                    userAnswer.textContent = 'Anda tidak menjawab pertanyaan ini';
-                    reviewItem.appendChild(userAnswer);
-                }
-                
-                if (userAnswers[index] !== question.answer) {
-                    const correctAnswer = document.createElement('div');
-                    correctAnswer.className = 'correct-answer';
-                    correctAnswer.textContent = `Jawaban benar: ${question.options[question.answer]}`;
-                    reviewItem.appendChild(correctAnswer);
-                }
-                
-                const explanation = document.createElement('div');
-                explanation.className = 'explanation';
-                explanation.textContent = question.explanation;
-                reviewItem.appendChild(explanation);
-                
-                reviewContainer.appendChild(reviewItem);
-            });
-            
-            showSection(resultsPage);
-        }
-
-        // Update timer
-        function updateTimer() {
-            if (!quizStartTime) return;
-            
-            const now = new Date();
-            const elapsed = Math.floor((now - quizStartTime) / 1000);
-            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
-            const seconds = (elapsed % 60).toString().padStart(2, '0');
-            
-            document.getElementById('quizTimer').textContent = `${minutes}:${seconds}`;
-        }
-
-        // Helper function to shuffle array
-        function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-            }
-            return newArray;
-        }
-
-        // Initialize with landing page
-        showSection(landingPage);
-    </script>
+    function shuffleArray(arr) {
+      return arr.map(v => [Math.random(), v]).sort().map(a => a[1]);
+    }
+  </script>
 </body>
 </html>
