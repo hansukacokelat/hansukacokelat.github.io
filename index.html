@@ -3,421 +3,817 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HANSUKACOKELAT</title>
+    <title>HanQUIS - Platform Kuis Interaktif</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
         }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        /* Floating particles */
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        /* Main container */
+
         .container {
-            position: relative;
-            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        
-        /* Main text styling */
-        .main-text {
-            font-size: clamp(3rem, 8vw, 12rem);
-            font-weight: 900;
+
+        .header {
             text-align: center;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
-            background-size: 600% 600%;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: rainbow 8s ease infinite, textPulse 4s ease-in-out infinite;
-            position: relative;
-            letter-spacing: -0.02em;
-            line-height: 0.9;
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .auth-section, .quiz-section, .dashboard {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .auth-section:hover, .quiz-section:hover, .dashboard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .toggle-auth {
+            text-align: center;
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 15px;
+        }
+
+        .toggle-auth:hover {
+            color: #764ba2;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .quiz-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
-        @keyframes rainbow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+        .quiz-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(240, 147, 251, 0.3);
         }
-        
-        @keyframes textPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+
+        .quiz-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-        
-        .main-text:hover {
-            transform: scale(1.1) rotateX(10deg);
-            filter: drop-shadow(0 20px 40px rgba(255, 107, 107, 0.4));
+
+        .quiz-description {
+            opacity: 0.9;
+            margin-bottom: 15px;
         }
-        
-        /* Glitch effect overlay */
-        .main-text::before,
-        .main-text::after {
-            content: 'HANSUKACOKELAT';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
-            background-size: 600% 600%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: rainbow 8s ease infinite;
+
+        .quiz-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
         }
-        
-        .main-text::before {
-            animation: glitch1 2s infinite;
-            z-index: -1;
+
+        .question-container {
+            text-align: center;
         }
-        
-        .main-text::after {
-            animation: glitch2 3s infinite;
-            z-index: -2;
+
+        .question {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 600;
         }
-        
-        @keyframes glitch1 {
-            0%, 90%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
         }
-        
-        @keyframes glitch2 {
-            0%, 90%, 100% { transform: translate(0); }
-            30% { transform: translate(2px, -2px); }
-            50% { transform: translate(-2px, 2px); }
-            70% { transform: translate(2px, 2px); }
+
+        .option {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
         }
-        
-        /* Geometric shapes */
-        .shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: rotate 20s infinite linear;
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
         }
-        
-        .shape1 {
-            width: 200px;
-            height: 200px;
-            border: 2px solid #ff6b6b;
-            border-radius: 50%;
-            top: 20%;
-            left: 10%;
-            animation-duration: 25s;
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
         }
-        
-        .shape2 {
-            width: 150px;
-            height: 150px;
-            border: 2px solid #4ecdc4;
-            top: 70%;
-            right: 15%;
-            animation-duration: 30s;
-            animation-direction: reverse;
-        }
-        
-        .shape3 {
-            width: 100px;
-            height: 100px;
-            border: 2px solid #45b7d1;
-            border-radius: 50%;
-            bottom: 20%;
-            left: 20%;
-            animation-duration: 35s;
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.2); }
-            to { transform: rotate(360deg) scale(1); }
-        }
-        
-        /* Floating elements */
-        .floating-element {
-            position: absolute;
-            width: 8px;
+
+        .quiz-progress {
+            background: #e9ecef;
             height: 8px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: floatUp 15s infinite ease-in-out;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
-        
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0px) translateX(0px) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% {
-                transform: translateY(-100px) translateX(50px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        /* Grid background */
-        .grid-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+
+        .quiz-progress-bar {
             height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s infinite linear;
-            z-index: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
         }
-        
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
+
+        .score-display {
+            text-align: center;
+            padding: 20px;
         }
-        
-        /* Spotlight effect */
-        .spotlight {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: spotlightMove 12s infinite ease-in-out;
-            pointer-events: none;
+
+        .score-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
         }
-        
-        @keyframes spotlightMove {
-            0%, 100% { transform: translate(-50px, -50px); }
-            25% { transform: translate(calc(100vw - 250px), -50px); }
-            50% { transform: translate(calc(100vw - 250px), calc(100vh - 250px)); }
-            75% { transform: translate(-50px, calc(100vh - 250px)); }
+
+        .score-text {
+            font-size: 1.2em;
+            color: #666;
         }
-        
-        /* Liquid morphing background */
-        .liquid-bg {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-            animation: liquidMove 20s ease infinite;
-            z-index: 0;
+
+        .user-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
         }
-        
-        @keyframes liquidMove {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            33% { transform: rotate(120deg) scale(1.1); }
-            66% { transform: rotate(240deg) scale(0.9); }
+
+        .welcome-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-        
-        /* Hover interactions */
-        .main-text:hover ~ .shape {
-            animation-duration: 2s;
-            opacity: 0.3;
-        }
-        
-        /* Responsive design */
+
         @media (max-width: 768px) {
-            .main-text {
-                font-size: clamp(2rem, 10vw, 6rem);
-                margin: 0 20px;
+            .container {
+                padding: 10px;
             }
             
-            .shape1, .shape2, .shape3 {
-                display: none;
+            .logo {
+                font-size: 2em;
+            }
+            
+            .auth-section, .quiz-section, .dashboard {
+                padding: 20px;
             }
         }
-        
-        /* Loading animation */
-        .main-text {
-            animation-delay: 0.5s;
-            opacity: 0;
-            animation: fadeInScale 2s ease forwards, rainbow 8s ease infinite, textPulse 4s ease-in-out infinite;
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #4caf50;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
         }
-        
-        @keyframes fadeInScale {
-            0% {
-                opacity: 0;
-                transform: scale(0.5) rotateY(90deg);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotateY(0deg);
-            }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #f44336;
         }
     </style>
 </head>
 <body>
-    <div class="grid-bg"></div>
-    <div class="liquid-bg"></div>
-    <div class="spotlight"></div>
-    
     <div class="container">
-        <h1 class="main-text">HANSUKACOKELAT</h1>
+        <div class="header">
+            <div class="logo">🎯 HanQUIS</div>
+            <div class="tagline">Platform Kuis Interaktif Terdepan</div>
+        </div>
+
+        <div class="main-content">
+            <!-- Auth Section -->
+            <div id="authSection" class="auth-section">
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <h2 style="text-align: center; margin-bottom: 25px; color: #333;">Masuk ke Akun Anda</h2>
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn">Masuk</button>
+                    </form>
+                    <div class="toggle-auth" onclick="toggleAuthForm()">
+                        Belum punya akun? Daftar di sini
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden">
+                    <h2 style="text-align: center; margin-bottom: 25px; color: #333;">Buat Akun Baru</h2>
+                    <form id="registerFormElement">
+                        <div class="form-group">
+                            <label for="registerName">Nama Lengkap</label>
+                            <input type="text" id="registerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Konfirmasi Password</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn">Daftar</button>
+                    </form>
+                    <div class="toggle-auth" onclick="toggleAuthForm()">
+                        Sudah punya akun? Masuk di sini
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard" class="dashboard hidden">
+                <div id="userInfo" class="user-info">
+                    <div class="welcome-text">Selamat Datang!</div>
+                    <div id="userName"></div>
+                </div>
+
+                <h2 style="text-align: center; margin-bottom: 25px; color: #333;">Pilih Kuis</h2>
+                
+                <div class="quiz-card" onclick="startQuiz('matematika')">
+                    <div class="quiz-title">🔢 Matematika Dasar</div>
+                    <div class="quiz-description">Uji kemampuan matematika dasar Anda dengan 10 soal pilihan ganda</div>
+                    <div class="quiz-stats">
+                        <span>10 Soal</span>
+                        <span>⏱️ 15 menit</span>
+                        <span>⭐ Mudah</span>
+                    </div>
+                </div>
+
+                <div class="quiz-card" onclick="startQuiz('sains')">
+                    <div class="quiz-title">🔬 Sains Umum</div>
+                    <div class="quiz-description">Jelajahi dunia sains dengan pertanyaan menarik seputar fisika, kimia, dan biologi</div>
+                    <div class="quiz-stats">
+                        <span>10 Soal</span>
+                        <span>⏱️ 20 menit</span>
+                        <span>⭐ Sedang</span>
+                    </div>
+                </div>
+
+                <div class="quiz-card" onclick="startQuiz('sejarah')">
+                    <div class="quiz-title">🏛️ Sejarah Indonesia</div>
+                    <div class="quiz-description">Kenali lebih dalam sejarah nusantara dan perjuangan kemerdekaan</div>
+                    <div class="quiz-stats">
+                        <span>10 Soal</span>
+                        <span>⏱️ 18 menit</span>
+                        <span>⭐ Sedang</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="logout()">Keluar</button>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quizSection" class="quiz-section hidden">
+                <div class="quiz-progress">
+                    <div id="progressBar" class="quiz-progress-bar" style="width: 0%"></div>
+                </div>
+                
+                <div class="question-container">
+                    <div id="questionNumber" style="color: #667eea; font-weight: bold; margin-bottom: 10px;"></div>
+                    <div id="questionText" class="question"></div>
+                    <div id="optionsContainer" class="options"></div>
+                    <button id="nextButton" class="btn hidden" onclick="nextQuestion()">Soal Berikutnya</button>
+                    <button id="finishButton" class="btn btn-success hidden" onclick="finishQuiz()">Selesai</button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="quiz-section hidden">
+                <div class="score-display">
+                    <div class="score-number" id="finalScore">0</div>
+                    <div class="score-text">dari <span id="totalQuestions">10</span> soal</div>
+                    <div id="scoreMessage" style="margin-top: 20px; font-size: 1.1em;"></div>
+                </div>
+                <button class="btn" onclick="backToDashboard()">Kembali ke Dashboard</button>
+                <button class="btn btn-secondary" onclick="retakeQuiz()">Ulangi Kuis</button>
+            </div>
+        </div>
     </div>
-    
-    <div class="shape shape1"></div>
-    <div class="shape shape2"></div>
-    <div class="shape shape3"></div>
-    
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
     <script>
-        // Create floating particles
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.animationDelay = Math.random() * 20 + 's';
-            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            document.body.appendChild(particle);
+        // Data Storage (in memory)
+        let users = [];
+        let currentUser = null;
+        let currentQuiz = null;
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        // Quiz Data
+        const quizData = {
+            matematika: {
+                title: "Matematika Dasar",
+                questions: [
+                    {
+                        question: "Berapakah hasil dari 15 + 27?",
+                        options: ["40", "42", "45", "48"],
+                        correct: 1
+                    },
+                    {
+                        question: "Berapakah hasil dari 8 × 7?",
+                        options: ["54", "56", "58", "64"],
+                        correct: 1
+                    },
+                    {
+                        question: "Berapakah hasil dari 144 ÷ 12?",
+                        options: ["11", "12", "13", "14"],
+                        correct: 1
+                    },
+                    {
+                        question: "Berapakah akar kuadrat dari 81?",
+                        options: ["7", "8", "9", "10"],
+                        correct: 2
+                    },
+                    {
+                        question: "Berapakah hasil dari 25% dari 200?",
+                        options: ["25", "40", "50", "75"],
+                        correct: 2
+                    },
+                    {
+                        question: "Berapakah hasil dari 2³?",
+                        options: ["6", "8", "9", "12"],
+                        correct: 1
+                    },
+                    {
+                        question: "Jika x + 5 = 12, maka x = ?",
+                        options: ["5", "6", "7", "8"],
+                        correct: 2
+                    },
+                    {
+                        question: "Berapakah keliling persegi dengan sisi 8 cm?",
+                        options: ["24 cm", "28 cm", "32 cm", "36 cm"],
+                        correct: 2
+                    },
+                    {
+                        question: "Berapakah luas segitiga dengan alas 10 cm dan tinggi 6 cm?",
+                        options: ["30 cm²", "60 cm²", "16 cm²", "20 cm²"],
+                        correct: 0
+                    },
+                    {
+                        question: "Berapakah hasil dari 45 - 18 + 7?",
+                        options: ["32", "34", "36", "38"],
+                        correct: 1
+                    }
+                ]
+            },
+            sains: {
+                title: "Sains Umum",
+                questions: [
+                    {
+                        question: "Planet terdekat dengan Matahari adalah?",
+                        options: ["Venus", "Mars", "Merkurius", "Bumi"],
+                        correct: 2
+                    },
+                    {
+                        question: "Rumus kimia air adalah?",
+                        options: ["H2O", "CO2", "NaCl", "O2"],
+                        correct: 0
+                    },
+                    {
+                        question: "Organ yang memompa darah dalam tubuh manusia adalah?",
+                        options: ["Paru-paru", "Hati", "Jantung", "Ginjal"],
+                        correct: 2
+                    },
+                    {
+                        question: "Satuan kecepatan dalam SI adalah?",
+                        options: ["km/jam", "m/s", "mph", "knot"],
+                        correct: 1
+                    },
+                    {
+                        question: "Gas yang paling banyak di atmosfer Bumi adalah?",
+                        options: ["Oksigen", "Karbon Dioksida", "Nitrogen", "Argon"],
+                        correct: 2
+                    },
+                    {
+                        question: "Proses fotosintesis menghasilkan?",
+                        options: ["Karbon Dioksida", "Oksigen", "Nitrogen", "Methane"],
+                        correct: 1
+                    },
+                    {
+                        question: "Kecepatan cahaya dalam vakum adalah?",
+                        options: ["300.000 km/s", "150.000 km/s", "450.000 km/s", "200.000 km/s"],
+                        correct: 0
+                    },
+                    {
+                        question: "Unsur kimia dengan simbol Fe adalah?",
+                        options: ["Fluorine", "Besi", "Fosfor", "Francium"],
+                        correct: 1
+                    },
+                    {
+                        question: "Berapa jumlah kromosom pada manusia normal?",
+                        options: ["44", "46", "48", "50"],
+                        correct: 1
+                    },
+                    {
+                        question: "Gaya yang menarik benda ke pusat Bumi disebut?",
+                        options: ["Gaya Magnet", "Gaya Gravitasi", "Gaya Sentrifugal", "Gaya Listrik"],
+                        correct: 1
+                    }
+                ]
+            },
+            sejarah: {
+                title: "Sejarah Indonesia",
+                questions: [
+                    {
+                        question: "Kapan Indonesia memproklamasikan kemerdekaan?",
+                        options: ["17 Agustus 1945", "17 Agustus 1944", "18 Agustus 1945", "16 Agustus 1945"],
+                        correct: 0
+                    },
+                    {
+                        question: "Siapa yang memproklamasikan kemerdekaan Indonesia?",
+                        options: ["Soekarno-Hatta", "Soekarno-Sjahrir", "Hatta-Sjahrir", "Soekarno saja"],
+                        correct: 0
+                    },
+                    {
+                        question: "Kerajaan maritim terbesar di Nusantara adalah?",
+                        options: ["Majapahit", "Sriwijaya", "Singasari", "Mataram"],
+                        correct: 1
+                    },
+                    {
+                        question: "Penjajah pertama yang datang ke Indonesia adalah?",
+                        options: ["Belanda", "Inggris", "Portugis", "Spanyol"],
+                        correct: 2
+                    },
+                    {
+                        question: "VOC didirikan pada tahun?",
+                        options: ["1600", "1602", "1605", "1610"],
+                        correct: 1
+                    },
+                    {
+                        question: "Perang Diponegoro terjadi pada tahun?",
+                        options: ["1825-1830", "1820-1825", "1830-1835", "1815-1820"],
+                        correct: 0
+                    },
+                    {
+                        question: "Siapa penulis teks Proklamasi kemerdekaan Indonesia?",
+                        options: ["Soekarno", "Hatta", "Ahmad Soebardjo", "Chairul Saleh"],
+                        correct: 0
+                    },
+                    {
+                        question: "Organisasi pemuda yang mengadakan Sumpah Pemuda adalah?",
+                        options: ["Budi Utomo", "Jong Java", "Perhimpunan Pelajar Indonesia", "Pemuda Indonesia"],
+                        correct: 2
+                    },
+                    {
+                        question: "Kapan Sumpah Pemuda diikrarkan?",
+                        options: ["28 Oktober 1928", "28 Oktober 1927", "27 Oktober 1928", "29 Oktober 1928"],
+                        correct: 0
+                    },
+                    {
+                        question: "Siapa yang dijuluki sebagai Bapak Pendidikan Indonesia?",
+                        options: ["R.A. Kartini", "Ki Hajar Dewantara", "Dr. Soetomo", "Douwes Dekker"],
+                        correct: 1
+                    }
+                ]
+            }
+        };
+
+        // Utility Functions
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${isError ? 'error' : ''} show`;
             
             setTimeout(() => {
-                particle.remove();
-            }, 30000);
+                notification.classList.remove('show');
+            }, 3000);
         }
-        
-        // Create floating elements
-        function createFloatingElement() {
-            const element = document.createElement('div');
-            element.className = 'floating-element';
-            element.style.left = Math.random() * 100 + 'vw';
-            element.style.bottom = '0px';
-            element.style.animationDelay = Math.random() * 15 + 's';
-            element.style.animationDuration = (Math.random() * 5 + 10) + 's';
+
+        function toggleAuthForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
             
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#fd79a8'];
-            element.style.background = colors[Math.floor(Math.random() * colors.length)];
-            
-            document.body.appendChild(element);
-            
-            setTimeout(() => {
-                element.remove();
-            }, 20000);
+            loginForm.classList.toggle('hidden');
+            registerForm.classList.toggle('hidden');
         }
-        
-        // Generate particles and floating elements
-        setInterval(createParticle, 500);
-        setInterval(createFloatingElement, 1000);
-        
-        // Interactive hover effects
-        const mainText = document.querySelector('.main-text');
-        
-        mainText.addEventListener('mousemove', (e) => {
-            const rect = mainText.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+
+        // Authentication Functions
+        function register(name, email, password) {
+            if (users.find(user => user.email === email)) {
+                showNotification('Email sudah terdaftar!', true);
+                return false;
+            }
             
-            mainText.style.textShadow = `
-                ${(x - rect.width/2) * 0.01}px ${(y - rect.height/2) * 0.01}px 20px rgba(255, 107, 107, 0.5),
-                ${(x - rect.width/2) * -0.01}px ${(y - rect.height/2) * -0.01}px 20px rgba(78, 205, 196, 0.5)
-            `;
-        });
-        
-        mainText.addEventListener('mouseleave', () => {
-            mainText.style.textShadow = 'none';
-        });
-        
-        // Click animation
-        mainText.addEventListener('click', () => {
-            mainText.style.animation = 'none';
-            setTimeout(() => {
-                mainText.style.animation = 'fadeInScale 1s ease, rainbow 8s ease infinite, textPulse 4s ease-in-out infinite';
-            }, 100);
-        });
-        
-        // Dynamic background color change based on time
-        function updateBackgroundColor() {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            
-            const hue = (hours * 15 + minutes * 0.25) % 360;
-            document.body.style.filter = `hue-rotate(${hue}deg)`;
-        }
-        
-        setInterval(updateBackgroundColor, 60000);
-        updateBackgroundColor();
-        
-        // Parallax effect on scroll (if content was scrollable)
-        let ticking = false;
-        
-        function updateParallax() {
-            const scrollY = window.pageYOffset;
-            const shapes = document.querySelectorAll('.shape');
-            
-            shapes.forEach((shape, index) => {
-                const speed = (index + 1) * 0.5;
-                shape.style.transform = `translateY(${scrollY * speed}px) rotate(${scrollY * 0.1}deg)`;
+            users.push({
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                scores: {}
             });
             
-            ticking = false;
+            showNotification('Registrasi berhasil! Silakan login.');
+            toggleAuthForm();
+            return true;
         }
-        
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateParallax);
-                ticking = true;
+
+        function login(email, password) {
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                currentUser = user;
+                showDashboard();
+                showNotification(`Selamat datang, ${user.name}!`);
+                return true;
             }
+            showNotification('Email atau password salah!', true);
+            return false;
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            showNotification('Berhasil keluar');
+        }
+
+        function showDashboard() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            document.getElementById('userName').textContent = currentUser.name;
+        }
+
+        // Quiz Functions
+        function startQuiz(quizType) {
+            currentQuiz = quizData[quizType];
+            currentQuestion = 0;
+            userAnswers = [];
+            score = 0;
+            
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('quizSection').classList.remove('hidden');
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = currentQuiz.questions[currentQuestion];
+            const totalQuestions = currentQuiz.questions.length;
+            
+            document.getElementById('questionNumber').textContent = `Soal ${currentQuestion + 1} dari ${totalQuestions}`;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / totalQuestions) * 100}%`;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('nextButton').classList.add('hidden');
+            document.getElementById('finishButton').classList.add('hidden');
+        }
+
+        function selectOption(selectedIndex, optionElement) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            optionElement.classList.add('selected');
+            
+            // Store answer
+            userAnswers[currentQuestion] = selectedIndex;
+            
+            // Show appropriate button
+            if (currentQuestion < currentQuiz.questions.length - 1) {
+                document.getElementById('nextButton').classList.remove('hidden');
+            } else {
+                document.getElementById('finishButton').classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function finishQuiz() {
+            // Calculate score
+            score = 0;
+            for (let i = 0; i < currentQuiz.questions.length; i++) {
+                if (userAnswers[i] === currentQuiz.questions[i].correct) {
+                    score++;
+                }
+            }
+            
+            // Save score to user
+            const quizType = Object.keys(quizData).find(key => quizData[key] === currentQuiz);
+            if (!currentUser.scores[quizType] || currentUser.scores[quizType] < score) {
+                currentUser.scores[quizType] = score;
+            }
+            
+            showResults();
+        }
+
+        function showResults() {
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('totalQuestions').textContent = currentQuiz.questions.length;
+            
+            const percentage = (score / currentQuiz.questions.length) * 100;
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = '🎉 Luar biasa! Anda sangat menguasai materi ini!';
+            } else if (percentage >= 60) {
+                message = '👍 Bagus! Anda cukup memahami materi ini.';
+            } else if (percentage >= 40) {
+                message = '📚 Tidak buruk, tapi masih perlu belajar lebih banyak.';
+            } else {
+                message = '💪 Jangan menyerah! Terus belajar dan coba lagi.';
+            }
+            
+            document.getElementById('scoreMessage').textContent = message;
+        }
+
+        function backToDashboard() {
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+
+        function retakeQuiz() {
+            startQuiz(Object.keys(quizData).find(key => quizData[key] === currentQuiz));
+        }
+
+        // Event Listeners
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            login(email, password);
         });
-        
-        // Add some initial particles
-        for (let i = 0; i < 20; i++) {
-            setTimeout(createParticle, i * 100);
-        }
-        
-        for (let i = 0; i < 10; i++) {
-            setTimeout(createFloatingElement, i * 200);
-        }
+
+        document.getElementById('registerFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('Password tidak cocok!', true);
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('Password minimal 6 karakter!', true);
+                return;
+            }
+            
+            register(name, email, password);
+        });
+
+        // Demo data for testing
+        users.push({
+            id: 1,
+            name: 'Demo User',
+            email: 'demo@hanquis.com',
+            password: 'demo123',
+            scores: {}
+        });
     </script>
 </body>
 </html>
